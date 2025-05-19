@@ -1,17 +1,13 @@
 import UIKit
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
     
     // MARK: - Properties
     @IBOutlet private var tableView: UITableView!
     
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    private let currentDate = Date()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -25,18 +21,20 @@ class ImagesListViewController: UIViewController {
             return
         }
         cell.imageButton.image = image
-        cell.dateLabel.text = dateFormatter.string(from: Date())
+        cell.dateLabel.text = DateFormatter.longStyle.string(from: currentDate)
         let isLike = indexPath.row % 2 == 0
         var like:UIImage?
         if isLike == true { like = UIImage(named: "Active") }
         else { like = UIImage(named: "No Active")}
         cell.likeButton.setImage(like, for: .normal)
+        
+        
     }
 }
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        photosName.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -62,4 +60,12 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = image.size.height * scale + imageSet.top + imageSet.bottom
         return cellHeight
     }
+}
+extension DateFormatter {
+    static let longStyle: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        return formatter
+    }()
 }

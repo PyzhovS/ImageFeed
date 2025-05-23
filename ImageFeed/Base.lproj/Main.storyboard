@@ -22,8 +22,8 @@
                         </tabBarAppearance>
                     </tabBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="tjE-r0-OPf"/>
                         <segue destination="yTP-8H-gtl" kind="relationship" relationship="viewControllers" id="Fgx-YB-Fj4"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="DGD-8t-9fP"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uxe-J6-ifW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -63,7 +63,7 @@
                                 <color key="textColor" name="YP White (iOS)"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="udM-so-zwI">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="udM-so-zwI" userLabel="ExitLabel">
                                 <rect key="frame" x="333" y="163" width="44" height="44"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="" image="Exit"/>
@@ -88,6 +88,12 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="oML-bD-Ce2"/>
+                    <connections>
+                        <outlet property="avatarLabel" destination="UyP-Cq-YPO" id="6Fw-P9-UjS"/>
+                        <outlet property="exitLabel" destination="udM-so-zwI" id="ocs-NS-rPM"/>
+                        <outlet property="labelName" destination="G3N-fv-9RY" id="NFe-bd-ZPd"/>
+                        <outlet property="labelNik" destination="O3u-Tz-WBt" id="wDu-gn-U1y"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nTg-b7-y7X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -173,19 +179,78 @@
                             <constraint firstAttribute="bottom" secondItem="ggC-zj-VIs" secondAttribute="bottom" id="sqo-6B-J9t"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="ba7-hc-8VE"/>
+                    <tabBarItem key="tabBarItem" title="Item" image="tab_editorial_active" id="VcB-7H-8oI"/>
+                    <navigationItem key="navigationItem" id="dj2-4W-R8a"/>
                     <connections>
                         <outlet property="tableView" destination="ggC-zj-VIs" id="lXt-NW-7aS"/>
+                        <segue destination="F30-43-5jN" kind="presentation" identifier="ShowSingleImage" id="0Qf-V5-f7i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1176" y="-331"/>
+            <point key="canvasLocation" x="-1176" y="-332"/>
+        </scene>
+        <!--Single Image View Controller-->
+        <scene sceneID="OCo-u3-htB">
+            <objects>
+                <viewController modalPresentationStyle="fullScreen" id="F30-43-5jN" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ift-fF-WFp">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fLh-KE-N2t">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Pgp-VY-hhE">
+                                        <rect key="frame" x="0.0" y="20" width="413" height="852"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="xpi-9I-Hwy"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="iPV-Ij-dQQ"/>
+                                <connections>
+                                    <outlet property="delegate" destination="F30-43-5jN" id="GhG-FB-XMR"/>
+                                </connections>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qr3-GQ-ZcG" userLabel="BackButton">
+                                <rect key="frame" x="8" y="67" width="48" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="PuV-6q-2nQ"/>
+                                    <constraint firstAttribute="width" constant="48" id="sIG-Rz-QBA"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Backward"/>
+                                <connections>
+                                    <action selector="backButoonTapped" destination="F30-43-5jN" eventType="touchUpInside" id="sXz-5T-STk"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="K8K-fF-zI5"/>
+                        <color key="backgroundColor" name="YP Black (iOS)"/>
+                        <constraints>
+                            <constraint firstItem="qr3-GQ-ZcG" firstAttribute="top" secondItem="K8K-fF-zI5" secondAttribute="top" constant="8" id="6LU-Qz-xqc"/>
+                            <constraint firstItem="K8K-fF-zI5" firstAttribute="trailing" secondItem="fLh-KE-N2t" secondAttribute="trailing" id="LvZ-1l-t6v"/>
+                            <constraint firstAttribute="bottom" secondItem="fLh-KE-N2t" secondAttribute="bottom" id="SnU-ct-Opc"/>
+                            <constraint firstItem="qr3-GQ-ZcG" firstAttribute="leading" secondItem="K8K-fF-zI5" secondAttribute="leading" constant="8" id="Uzo-Lv-iCZ"/>
+                            <constraint firstItem="fLh-KE-N2t" firstAttribute="leading" secondItem="K8K-fF-zI5" secondAttribute="leading" id="j6z-VR-Ndk"/>
+                            <constraint firstItem="fLh-KE-N2t" firstAttribute="top" secondItem="Ift-fF-WFp" secondAttribute="top" id="y7S-r4-yY6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="dLJ-mc-uc2"/>
+                    <connections>
+                        <outlet property="imageView" destination="Pgp-VY-hhE" id="mWb-AY-k8F"/>
+                        <outlet property="scrollView" destination="fLh-KE-N2t" id="u9v-cJ-4aE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="COH-NT-dj9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-216.03053435114504" y="-332.3943661971831"/>
         </scene>
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="Active" width="44" height="44"/>
+        <image name="Backward" width="24" height="24"/>
         <image name="Exit" width="44" height="44"/>
         <image name="avatar" width="350" height="350"/>
         <image name="tab_editorial_active" width="30" height="30"/>

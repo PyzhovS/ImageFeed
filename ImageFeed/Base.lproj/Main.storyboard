@@ -212,6 +212,18 @@
                                     <outlet property="delegate" destination="F30-43-5jN" id="GhG-FB-XMR"/>
                                 </connections>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BTH-Vr-CVu" userLabel="ButtonShare">
+                                <rect key="frame" x="171.66666666666666" y="751" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="uDK-Aq-74a"/>
+                                    <constraint firstAttribute="width" constant="50" id="yq6-Yk-6dv"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Sharing"/>
+                                <connections>
+                                    <action selector="didTapShareButton:" destination="F30-43-5jN" eventType="touchUpInside" id="vKt-uc-AWu"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qr3-GQ-ZcG" userLabel="BackButton">
                                 <rect key="frame" x="8" y="67" width="48" height="48"/>
                                 <constraints>
@@ -232,7 +244,9 @@
                             <constraint firstItem="K8K-fF-zI5" firstAttribute="trailing" secondItem="fLh-KE-N2t" secondAttribute="trailing" id="LvZ-1l-t6v"/>
                             <constraint firstAttribute="bottom" secondItem="fLh-KE-N2t" secondAttribute="bottom" id="SnU-ct-Opc"/>
                             <constraint firstItem="qr3-GQ-ZcG" firstAttribute="leading" secondItem="K8K-fF-zI5" secondAttribute="leading" constant="8" id="Uzo-Lv-iCZ"/>
+                            <constraint firstItem="BTH-Vr-CVu" firstAttribute="centerX" secondItem="K8K-fF-zI5" secondAttribute="centerX" id="Zoy-sK-ora"/>
                             <constraint firstItem="fLh-KE-N2t" firstAttribute="leading" secondItem="K8K-fF-zI5" secondAttribute="leading" id="j6z-VR-Ndk"/>
+                            <constraint firstItem="K8K-fF-zI5" firstAttribute="bottom" secondItem="BTH-Vr-CVu" secondAttribute="bottom" constant="17" id="rav-ig-oxm"/>
                             <constraint firstItem="fLh-KE-N2t" firstAttribute="top" secondItem="Ift-fF-WFp" secondAttribute="top" id="y7S-r4-yY6"/>
                         </constraints>
                     </view>
@@ -252,6 +266,7 @@
         <image name="Active" width="44" height="44"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Exit" width="44" height="44"/>
+        <image name="Sharing" width="50" height="50"/>
         <image name="avatar" width="350" height="350"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>

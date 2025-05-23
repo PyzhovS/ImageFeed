@@ -1,9 +1,9 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    @IBOutlet weak var avatarLabel: UIImageView!
-    @IBOutlet weak var labelName: UILabel!
-    @IBOutlet weak var labelComment: UILabel!
-    @IBOutlet weak var labelNik: UILabel!    
-    @IBOutlet weak var exitLabel: UIButton!
+    @IBOutlet private var avatarLabel: UIImageView!
+    @IBOutlet private var labelName: UILabel!
+    @IBOutlet private var labelComment: UILabel!
+    @IBOutlet private var labelNik: UILabel!
+    @IBOutlet private var exitLabel: UIButton!
 }

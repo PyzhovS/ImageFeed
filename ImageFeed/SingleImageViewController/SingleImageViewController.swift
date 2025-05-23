@@ -15,6 +15,11 @@ class SingleImageViewController: UIViewController {
     @IBAction private func backButoonTapped() {
         dismiss(animated: true, completion: nil)
     }
+    @IBAction private func didTapShareButton(_ sender: UIButton) {
+        guard let image else { return }
+        let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(share, animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,12 +58,12 @@ extension SingleImageViewController: UIScrollViewDelegate {
     private func centerImageInScrollView() {
         let scrollViewSize = scrollView.bounds.size
         let imageViewSize = imageView.frame.size
-    
+        
         let horizontalInset = max(0, (scrollViewSize.width  - imageViewSize.width) / 2)
         let verticalInset = max(0, (scrollViewSize.height - imageViewSize.height) / 2)
-       
+        
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
-       
-                                  
+        
+        
     }
 }

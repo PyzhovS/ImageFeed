@@ -9,14 +9,12 @@ final class ImagesListViewController: UIViewController {
     private let currentDate = Date()
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
        
     }
-    // MARK: - Setup Methods
-    
+    // MARK: - Setup Methods    
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
@@ -76,9 +74,8 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = image.size.height * scale + imageSet.top + imageSet.bottom
         return cellHeight
     }
-    
-   
 }
+
 extension DateFormatter {
     static let longStyle: DateFormatter = {
         let formatter = DateFormatter()
@@ -87,6 +84,3 @@ extension DateFormatter {
         return formatter
     }()
 }
-
-
-

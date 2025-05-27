@@ -7,8 +7,8 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet private var likeButton: UIButton!
     @IBOutlet private var dateLabel: UILabel!
     
+    //вынес функцию сюда, что бы Outlet  сделать private
     func configure ( image: UIImage, date: String, like: Bool) {
-        
         imageButton.image = image
         dateLabel.text = date
         let isLike = like

@@ -1,5 +1,5 @@
 import UIKit
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     
     var image: UIImage? {
         didSet {
@@ -55,6 +55,7 @@ extension SingleImageViewController: UIScrollViewDelegate {
     internal func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerImageInScrollView()
     }
+    //реализация функции zoom и центровать картинку
     private func centerImageInScrollView() {
         let scrollViewSize = scrollView.bounds.size
         let imageViewSize = imageView.frame.size
@@ -63,7 +64,5 @@ extension SingleImageViewController: UIScrollViewDelegate {
         let verticalInset = max(0, (scrollViewSize.height - imageViewSize.height) / 2)
         
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
-        
-        
     }
 }

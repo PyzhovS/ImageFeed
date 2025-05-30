@@ -12,37 +12,34 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-       
     }
-    // MARK: - Setup Methods    
+    // MARK: - Setup Methods
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
         cell.configure(image: image,
                        date: DateFormatter.longStyle.string(from: currentDate),
-                       like: indexPath.row % 2 == 0)
+                       likes: indexPath.row % 2 == 0)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           if segue.identifier == showSingleImageIdentifier {
-               guard
-                   let viewController = segue.destination as? SingleImageViewController, // 2
-                   let indexPath = sender as? IndexPath
-               else {
-                   assertionFailure("Invalid segue destination")
-                   return
-               }
-
-               let image = UIImage(named: photosName[indexPath.row])
-               viewController.image = image
-             
-           } else {
-               super.prepare(for: segue, sender: sender)
-           }
-       }
-   }
-
+        guard segue.identifier == showSingleImageIdentifier else {
+            super.prepare(for: segue, sender: sender)
+            return
+        }
+        guard
+            let viewController = segue.destination as? SingleImageViewController, // 2
+            let indexPath = sender as? IndexPath
+        else {
+            assertionFailure("Invalid segue destination")
+            return
+        }
+        
+        let image = UIImage(named: photosName[indexPath.row])
+        viewController.image = image
+    }
+}
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

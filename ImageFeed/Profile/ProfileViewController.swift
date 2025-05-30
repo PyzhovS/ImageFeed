@@ -9,7 +9,7 @@ final class ProfileViewController: UIViewController {
         }
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
-            }()
+    }()
     private lazy var labelName: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"

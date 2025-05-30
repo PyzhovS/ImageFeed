@@ -7,14 +7,15 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet private var likeButton: UIButton!
     @IBOutlet private var dateLabel: UILabel!
     
-    //вынес функцию сюда, что бы Outlet  сделать private
-    func configure ( image: UIImage, date: String, like: Bool) {
+    let activeImage = UIImage(named: "Active")
+    let noActiveImage = UIImage(named: "No Active")
+    
+    func configure ( image: UIImage, date: String, likes: Bool) {
         imageButton.image = image
         dateLabel.text = date
-        let isLike = like
+        let isLike = likes
         var like:UIImage?
-        if isLike == true { like = UIImage(named: "Active") }
-        else { like = UIImage(named: "No Active")}
+        like = isLike ? activeImage : noActiveImage
         likeButton.setImage(like, for: .normal)
         
     }

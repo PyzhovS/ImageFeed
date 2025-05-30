@@ -51,6 +51,17 @@ final class ProfileViewController: UIViewController {
         setupUI()
     }
     // MARK: - Setup Methods
+    
+    func setupUI() {
+        view.addSubview(imageView)
+        view.addSubview(labelName)
+        view.addSubview(labelNik)
+        view.addSubview(labelComment)
+        view.addSubview(exitButton)
+        
+        setupConstraint()
+    }
+    
     func setupConstraint() {
         NSLayoutConstraint.activate([
             imageView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
@@ -76,15 +87,4 @@ final class ProfileViewController: UIViewController {
             exitButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
         ])
     }
-    
-    func setupUI() {
-        view.addSubview(imageView)
-        view.addSubview(labelName)
-        view.addSubview(labelNik)
-        view.addSubview(labelComment)
-        view.addSubview(exitButton)
-        
-        setupConstraint()
-    }
 }
-

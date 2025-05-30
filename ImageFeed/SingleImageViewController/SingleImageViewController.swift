@@ -55,7 +55,7 @@ extension SingleImageViewController: UIScrollViewDelegate {
     internal func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerImageInScrollView()
     }
-    //реализация функции zoom и центровать картинку
+ 
     private func centerImageInScrollView() {
         let scrollViewSize = scrollView.bounds.size
         let imageViewSize = imageView.frame.size

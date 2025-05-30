@@ -2,8 +2,9 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     
-    // MARK: - Properties
+    
     @IBOutlet private var tableView: UITableView!
+    // MARK: - Properties
     private let showSingleImageIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private let currentDate = Date()

@@ -5,7 +5,7 @@ class AuthViewController: UIViewController, WebViewViewControllerDelegate {
    
     
     let webViewSegueIdentifier = "ShowWebView"
-    
+    let oAuth2Service = OAuth2Service()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,16 @@ class AuthViewController: UIViewController, WebViewViewControllerDelegate {
     }
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        // //TODO: process code
+        oAuth2Service.fetchOAuthToken(code: code) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case.success(let accessToken):
+                    print("Access Token: \(accessToken)")
+                 case .failure(let error):
+                    print("Ошибка получения токена: \(error.localizedDescription)")
+                }
+            }
+        }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

@@ -1,16 +1,18 @@
 import UIKit
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
 
 class AuthViewController: UIViewController, WebViewViewControllerDelegate {
-   
     
-    let webViewSegueIdentifier = "ShowWebView"
-    let oAuth2Service = OAuth2Service()
+    // MARK: - Properties
+    private let webViewSegueIdentifier = "ShowWebView"
+    private let oAuth2Service = OAuth2Service()
+    private let oAuth2TokenStorage = OAuth2TokenStorage()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    
-    }
+    weak var delegate: AuthViewControllerDelegate?
+    // MARK: - Setup Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == webViewSegueIdentifier {
             guard
@@ -30,11 +32,13 @@ class AuthViewController: UIViewController, WebViewViewControllerDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case.success(let accessToken):
+                    self.oAuth2TokenStorage.token = accessToken.accessToken
                     print("Access Token: \(accessToken)")
-                 case .failure(let error):
+                case .failure(let error):
                     print("Ошибка получения токена: \(error.localizedDescription)")
                 }
             }
+            self.delegate?.authViewController(self, didAuthenticateWithCode: code)
         }
     }
     

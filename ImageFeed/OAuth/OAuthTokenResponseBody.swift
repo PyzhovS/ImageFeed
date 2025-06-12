@@ -1,11 +1,9 @@
 import Foundation
 
 struct OAuthTokenResponseBody: Decodable {
-    var accessToken: Data
+    let accessToken: String
  
-    
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
     }
-    
 }

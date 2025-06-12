@@ -1,7 +1,7 @@
 import UIKit
 
-class OAuth2Service {
-  
+final class OAuth2Service {
+    // MARK: - Setup Methods
     func makeOAuthTokenRequest( code: String ) -> URLRequest? {
         var components = URLComponents()
         components.scheme = "https"
@@ -23,26 +23,26 @@ class OAuth2Service {
         request.httpMethod = "POST"
         return request
     }
-    func fetchOAuthToken ( code: String, completion: @escaping (Result<Data, Error>)-> Void) {
+    func fetchOAuthToken ( code: String, completion: @escaping (Result<OAuthTokenResponseBody, Error>)-> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(NSError(domain: "Ошибка URL", code: 0, userInfo: nil)))
             return
         }
         let task = URLSession.shared.data(for: request) { result in
-                switch result {
-                case .success(let data):
-                    do {
-                        let decoder = JSONDecoder()
-                        let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                        completion(.success(response.accessToken))
-                    } catch {
-                        completion(.failure(NetworkError.urlSessionError))
-                    }
-                case .failure(let error):
-                    completion(.failure(error))
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    completion(.success(response))
+                } catch {
+                    completion(.failure(NetworkError.urlSessionError))
                 }
+            case .failure(let error):
+                completion(.failure(error))
             }
-            
-            task.resume()
         }
+        
+        task.resume()
+    }
 }

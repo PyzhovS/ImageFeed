@@ -32,7 +32,7 @@ class AuthViewController: UIViewController, WebViewViewControllerDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case.success(let accessToken):
-                    self.oAuth2TokenStorage.token = accessToken.accessToken
+                    self.oAuth2TokenStorage.token = accessToken
                     print("Access Token: \(accessToken)")
                 case .failure(let error):
                     print("Ошибка получения токена: \(error.localizedDescription)")

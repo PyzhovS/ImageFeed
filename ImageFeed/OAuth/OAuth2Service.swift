@@ -26,7 +26,7 @@ final class OAuth2Service {
         request.httpMethod = "POST"
         return request
     }
-    func fetchOAuthToken ( code: String, completion: @escaping (Result<OAuthTokenResponseBody, Error>)-> Void) {
+    func fetchOAuthToken ( code: String, completion: @escaping (Result<String, Error>)-> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(NSError(domain: "Ошибка URL", code: 0, userInfo: nil)))
             return
@@ -37,7 +37,7 @@ final class OAuth2Service {
                 do {
                     let decoder = JSONDecoder()
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(response))
+                    completion(.success(response.accessToken))
                 } catch {
                     completion(.failure(NetworkError.urlSessionError))
                 }

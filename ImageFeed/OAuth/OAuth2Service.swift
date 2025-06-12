@@ -1,6 +1,9 @@
 import UIKit
 
 final class OAuth2Service {
+    static let shared = OAuth2Service()
+       private init() {}
+  
     // MARK: - Setup Methods
     func makeOAuthTokenRequest( code: String ) -> URLRequest? {
         var components = URLComponents()

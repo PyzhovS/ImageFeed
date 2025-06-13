@@ -16,7 +16,6 @@ final class ImagesListCell: UITableViewCell {
         let isLike = likes
         var like:UIImage?
         like = isLike ? activeImage : noActiveImage
-        likeButton.setImage(like, for: .normal)
-        
+        likeButton.setImage(like, for: .normal)        
     }
 }

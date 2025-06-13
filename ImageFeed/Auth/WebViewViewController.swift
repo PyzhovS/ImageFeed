@@ -51,8 +51,9 @@ class WebViewViewController: UIViewController {
     }
     
     private func updateProgress() {
+        let numberOfDecimal = 0.0001
         progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= numberOfDecimal
     }
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {

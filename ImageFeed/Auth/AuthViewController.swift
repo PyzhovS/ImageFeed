@@ -4,12 +4,12 @@ protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
-class AuthViewController: UIViewController, WebViewViewControllerDelegate {
+final class AuthViewController: UIViewController, WebViewViewControllerDelegate {
     
     // MARK: - Properties
     private let webViewSegueIdentifier = "ShowWebView"
     private let oAuth2Service = OAuth2Service.shared
-    private let oAuth2TokenStorage = OAuth2TokenStorage()
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     
     weak var delegate: AuthViewControllerDelegate?
     // MARK: - Setup Methods
@@ -28,16 +28,18 @@ class AuthViewController: UIViewController, WebViewViewControllerDelegate {
     }
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        oAuth2Service.fetchOAuthToken(code: code) { result in
+        oAuth2Service.fetchOAuthToken(code: code) {[weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case.success(let accessToken):
+                    guard let self else { return}
                     self.oAuth2TokenStorage.token = accessToken
                     print("Access Token: \(accessToken)")
                 case .failure(let error):
                     print("Ошибка получения токена: \(error.localizedDescription)")
                 }
             }
+            guard let self else { return}
             self.delegate?.authViewController(self, didAuthenticateWithCode: code)
         }
     }

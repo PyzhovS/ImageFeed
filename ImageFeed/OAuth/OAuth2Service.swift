@@ -20,8 +20,11 @@ final class OAuth2Service {
         ]
         
         guard let url = components.url else {
+            print("нет верного url для запроса")
             return nil
         }
+        print("корректный url для запроса \(url)")
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request

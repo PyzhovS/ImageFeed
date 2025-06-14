@@ -20,7 +20,7 @@ final class SingleImageViewController: UIViewController {
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(share, animated: true, completion: nil)
     }
-    
+    // MARK: - Setup Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
@@ -55,7 +55,7 @@ extension SingleImageViewController: UIScrollViewDelegate {
     internal func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerImageInScrollView()
     }
- 
+    
     private func centerImageInScrollView() {
         let scrollViewSize = scrollView.bounds.size
         let imageViewSize = imageView.frame.size

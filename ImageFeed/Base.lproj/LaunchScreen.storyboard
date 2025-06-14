@@ -19,6 +19,10 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="hTk-7o-ayn">
                                 <rect key="frame" x="159" y="412" width="75" height="78"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="DzE-xA-nQs"/>
+                                    <constraint firstAttribute="height" constant="78" id="WbV-Ps-GB2"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

@@ -1,6 +1,12 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService()
+    private let token = OAuth2TokenStorage.shared.token
+    
+  
+    
     // MARK: - Properties
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -48,6 +54,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchUserProfile()
         setupUI()
     }
     // MARK: - Setup Methods
@@ -87,4 +94,21 @@ final class ProfileViewController: UIViewController {
             exitButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
         ])
     }
-}
+    
+    private func fetchUserProfile() {
+        profileService.fetchProfile(token: token!) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let profile):
+                        self?.labelName.text = "\(profile.firstName) \(profile.lastName)"
+                        self?.labelNik.text = "@\(profile.userName)"
+                        self?.labelComment.text = profile.bio
+                        print("Профиль успешно загружен.")
+                    case .failure(let error):
+                        print("Ошибка загрузки профиля: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+    }
+

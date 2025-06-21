@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
@@ -33,8 +34,10 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                 switch result {
                 case.success(let accessToken):
                     guard let self else { return}
+                    UIBlockProgressHUD.show()
                     self.oAuth2TokenStorage.token = accessToken
                     print("Access Token: \(accessToken)")
+                    UIBlockProgressHUD.dismiss()
                 case .failure(let error):
                     print("Ошибка получения токена: \(error.localizedDescription)")
                 }

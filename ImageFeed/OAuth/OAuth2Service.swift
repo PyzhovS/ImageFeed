@@ -7,8 +7,15 @@ enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
+    private let urlSession = URLSession.shared
     static let shared = OAuth2Service()
+    private var task: URLSessionTask?
+    private var lastCode: String?
     private init() {}
     
     // MARK: - Setup Methods
@@ -36,12 +43,26 @@ final class OAuth2Service {
         return request
     }
     func fetchOAuthToken ( code: String, completion: @escaping (Result<String, Error>)-> Void) {
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+            
+        }
+        task?.cancel()
+        lastCode = code
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(NSError(domain: "Ошибка URL", code: 0, userInfo: nil)))
+            completion(.failure(AuthServiceError.invalidRequest))
             print("Ошибка при созданий URLRequest")
             return
         }
-        let task = URLSession.shared.data(for: request) { result in
+        let task = urlSession.data(for: request) { result in
+            defer {
+                self.task = nil
+                self.lastCode = nil
+            }
+            
             switch result {
             case .success(let data):
                 do {
@@ -59,7 +80,7 @@ final class OAuth2Service {
                 print("Ошибка при получении запроса URLSession.shared.data: \(error.localizedDescription)")
             }
         }
-        
+        self.task = task
         task.resume()
     }
 }

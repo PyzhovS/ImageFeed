@@ -48,7 +48,7 @@ final class ProfileService {
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 let profileResult = try decoder.decode(ProfileResult.self, from: data)
                 
-                let profile = Profile(userName: profileResult.userName ?? "Нету данных",
+                let profile = Profile(userName: profileResult.username ?? "Нету данных",
                                       firstName: profileResult.firstName ?? "Гость",
                                       lastName: profileResult.lastName ?? "",
                                       bio: profileResult.bio ?? ""

@@ -2,10 +2,10 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private let profileService = ProfileService()
+    private let profileService = ProfileService.shared
     private let token = OAuth2TokenStorage.shared.token
     
-  
+    
     
     // MARK: - Properties
     private lazy var imageView: UIImageView = {
@@ -18,7 +18,7 @@ final class ProfileViewController: UIViewController {
     }()
     private lazy var labelName: UILabel = {
         let label = UILabel()
-        label.text = "Екатерина Новикова"
+        label.text = ""
         label.textColor = .ypWhiteIOS
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 23)
@@ -54,7 +54,9 @@ final class ProfileViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchUserProfile()
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        }
         setupUI()
     }
     // MARK: - Setup Methods
@@ -95,20 +97,12 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func fetchUserProfile() {
-        profileService.fetchProfile(token: token!) { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let profile):
-                        self?.labelName.text = "\(profile.firstName) \(profile.lastName)"
-                        self?.labelNik.text = "@\(profile.userName)"
-                        self?.labelComment.text = profile.bio
-                        print("Профиль успешно загружен.")
-                    case .failure(let error):
-                        print("Ошибка загрузки профиля: \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
+  
+    func updateProfileDetails(profile: Profile) {
+        self.labelName.text = profile.name
+        self.labelNik.text = profile.loginName
+        self.labelComment.text = profile.bio
     }
+    }
+    
 

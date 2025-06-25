@@ -2,7 +2,7 @@ import UIKit
 import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
-    func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+    func authViewController(_ vc: AuthViewController )
 }
 
 final class AuthViewController: UIViewController, WebViewViewControllerDelegate {
@@ -43,7 +43,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                 }
             }
             guard let self else { return}
-            self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+            self.delegate?.authViewController(self)
         }
     }
     

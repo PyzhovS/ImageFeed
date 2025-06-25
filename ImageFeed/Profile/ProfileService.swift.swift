@@ -2,10 +2,17 @@ import UIKit
 
 
 final class ProfileService {
+    static let shared = ProfileService()
+       private init () {}
+    
+    private(set) var profile: Profile?
     
     func fetchProfile( token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
-        let request = profileData(with: token)!
+        guard let request = profileData(with: token) else {
+            print("нету запроса URLRequest")
+            return
+        }
         
         func profileData( with token: String) -> URLRequest? {
             
@@ -25,7 +32,7 @@ final class ProfileService {
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            
+             
             if let error = error {
                 completion(.failure(error))
                 print("Ошибка при получении данных: \(error.localizedDescription)")
@@ -48,13 +55,13 @@ final class ProfileService {
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 let profileResult = try decoder.decode(ProfileResult.self, from: data)
                 
-                let profile = Profile(userName: profileResult.username ?? "Нету данных",
+                self.profile = Profile(userName: profileResult.username ?? "Нету данных",
                                       firstName: profileResult.firstName ?? "Гость",
                                       lastName: profileResult.lastName ?? "",
                                       bio: profileResult.bio ?? ""
                 )
                 
-                completion(.success(profile))
+                completion(.success(self.profile!))
                 print("Профиль успешно загружен.")
             } catch {
                 completion(.failure(error))
@@ -64,5 +71,6 @@ final class ProfileService {
         
         task.resume()
     }
+    
 }
 

@@ -1,5 +1,9 @@
 import UIKit
 
 struct UserResult: Codable {
-let profileImage:String?
+let profileImage:ProfileImage
+}
+
+struct ProfileImage: Codable {
+    let small: String
 }

@@ -1,28 +1,25 @@
 import UIKit
 
-final class ProfileImageService {
-    static let shared = ProfileImageService()
-    private init () {}
+
+final class ProfileService {
+    static let shared = ProfileService()
+       private init () {}
     
-    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
+    private(set) var profile: Profile?
     
-    
-    private (set) var avatarURL: String?
-    
-    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void){
+    func fetchProfile( token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
-        guard let token = oAuth2TokenStorage.token else { return}
-        guard let request = profileImage(with: token) else {
+        guard let request = profileData(with: token) else {
             print("нету запроса URLRequest")
             return
         }
         
-        func profileImage( with token: String) -> URLRequest? {
+        func profileData( with token: String) -> URLRequest? {
             
             var components = URLComponents()
             components.scheme = "https"
             components.host = "api.unsplash.com"
-            components.path = "/users/:\(username)"
+            components.path = "/me"
             
             guard let url = components.url else {
                 print("нет верного url для запроса")
@@ -56,19 +53,25 @@ final class ProfileImageService {
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let userResult = try decoder.decode(UserResult.self, from: data)
+                let profileResult = try decoder.decode(ProfileResult.self, from: data)
                 
-                self.avatarURL = userResult.profileImage ?? "Аватар не загружен"
-                
-                guard let avatarURL = self.avatarURL else { return }
-                completion(.success(avatarURL))
+                self.profile = Profile(userName: profileResult.username ?? "Нету данных",
+                                      firstName: profileResult.firstName ?? "Гость",
+                                      lastName: profileResult.lastName ?? "",
+                                      bio: profileResult.bio ?? ""
+                )
+                guard let profile = self.profile else { return }
+                completion(.success(profile))
                 print("Профиль успешно загружен.")
             } catch {
                 completion(.failure(error))
                 print("Ошибка декодирования JSON: \(error.localizedDescription)")
             }
+            
         }
-        
         task.resume()
+        
     }
+    
 }
+

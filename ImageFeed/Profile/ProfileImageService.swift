@@ -4,9 +4,8 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private init () {}
     
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
-    
-    
     private (set) var avatarURL: String?
     
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void){
@@ -64,6 +63,10 @@ final class ProfileImageService {
                 guard let avatarURL = self.avatarURL else { return }
                 completion(.success(avatarURL))
                 print("Аватарка успешна загружена.")
+                NotificationCenter.default
+                    .post(name: ProfileImageService.didChangeNotification,
+                          object: self,
+                          userInfo: ["URL": avatarURL])
             } catch {
                 completion(.failure(error))
                 print("Ошибка декодирования JSON: \(error.localizedDescription)")

@@ -4,7 +4,7 @@ final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let token = OAuth2TokenStorage.shared.token
-    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     
     // MARK: - Properties
@@ -58,8 +58,26 @@ final class ProfileViewController: UIViewController {
             updateProfileDetails(profile: profile)
         }
         setupUI()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()                                 
+            }
+        updateAvatar()
+        
     }
     // MARK: - Setup Methods
+    func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+    }
     
     func setupUI() {
         view.addSubview(imageView)

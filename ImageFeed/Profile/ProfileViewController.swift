@@ -3,6 +3,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     private let token = OAuth2TokenStorage.shared.token
     private var profileImageServiceObserver: NSObjectProtocol?
     
@@ -66,7 +67,7 @@ final class ProfileViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                self.updateAvatar()                                 
+                self.updateAvatar()
             }
         updateAvatar()
         
@@ -120,6 +121,7 @@ final class ProfileViewController: UIViewController {
         self.labelName.text = profile.name
         self.labelNik.text = profile.loginName
         self.labelComment.text = profile.bio
+        self.imageView.image = profileImageService.image
     }
     }
     

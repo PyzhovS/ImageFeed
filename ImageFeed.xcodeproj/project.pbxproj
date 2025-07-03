@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A560AF4B2E14720700B3A5B5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A560AF4A2E14720700B3A5B5 /* Kingfisher */; };
 		A59A1DB92DF35BD6000EE335 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A59A1DB82DF35BD6000EE335 /* WebKit.framework */; };
 		A5CD4E922E051CA400B28761 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = A5CD4E912E051CA400B28761 /* ProgressHUD */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A560AF4B2E14720700B3A5B5 /* Kingfisher in Frameworks */,
 				A59A1DB92DF35BD6000EE335 /* WebKit.framework in Frameworks */,
 				A5CD4E922E051CA400B28761 /* ProgressHUD in Frameworks */,
 			);
@@ -96,6 +98,7 @@
 			name = ImageFeed;
 			packageProductDependencies = (
 				A5CD4E912E051CA400B28761 /* ProgressHUD */,
+				A560AF4A2E14720700B3A5B5 /* Kingfisher */,
 			);
 			productName = ImageFeed;
 			productReference = A54FBBB52DD5C0FF00BDCE57 /* ImageFeed.app */;
@@ -127,6 +130,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A5CD4E902E051CA400B28761 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+				A560AF492E14720700B3A5B5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A54FBBB62DD5C0FF00BDCE57 /* Products */;
@@ -181,7 +185,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.pyzhovs.kz.ImageFeed;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.pyzhovs391.kz.ImageFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -214,7 +218,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.pyzhovs.kz.ImageFeed;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.yandex.pyzhovs391.kz.ImageFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -370,6 +374,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A560AF492E14720700B3A5B5 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.3;
+			};
+		};
 		A5CD4E902E051CA400B28761 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
@@ -381,6 +393,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A560AF4A2E14720700B3A5B5 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A560AF492E14720700B3A5B5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		A5CD4E912E051CA400B28761 /* ProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A5CD4E902E051CA400B28761 /* XCRemoteSwiftPackageReference "ProgressHUD" */;

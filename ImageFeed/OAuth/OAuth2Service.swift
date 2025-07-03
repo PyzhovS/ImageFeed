@@ -34,7 +34,7 @@ final class OAuth2Service {
         ]
         
         guard let url = components.url else {
-            print("нет верного url для запроса")
+            print("[makeOAuthTokenRequest] - Ошибка запроса не верный URl ")
             return nil
         }
         
@@ -46,6 +46,7 @@ final class OAuth2Service {
         assert(Thread.isMainThread)
         guard lastCode != code else {
             completion(.failure(AuthServiceError.invalidRequest))
+            print("[makeOAuthTokenRequest] - Ошибка запроса повторный код \(code) ")
             return
             
         }
@@ -54,32 +55,25 @@ final class OAuth2Service {
         
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(AuthServiceError.invalidRequest))
-            print("Ошибка при созданий URLRequest")
+            print("[fetchOAuthToken] - Ошибка запроса, не удалось создать запрос с кодом \(code)")
+           
             return
         }
-        let task = urlSession.data(for: request) { result in
-            defer {
-                self.task = nil
-                self.lastCode = nil
-            }
-            
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in defer {
+            self?.task = nil
+            self?.lastCode = nil
+        }
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(response.accessToken))
-                    print("Декодирование JSON прошло успешно")
-                } catch {
-                    completion(.failure(NetworkError.urlSessionError))
-                    print("Ошибка не удалось декодировть JSON: \(error.localizedDescription)")
-                }
+            case .success(let response):
+                completion(.success(response.accessToken))
+                
             case .failure(let error):
                 completion(.failure(error))
-                print("Ошибка при получении запроса URLSession.shared.data: \(error.localizedDescription)")
+                print("[fetchOAuthToken] - Ошибка сети - \(error.localizedDescription)с кодом: \(code)")
+               
             }
         }
+        
         self.task = task
         task.resume()
     }

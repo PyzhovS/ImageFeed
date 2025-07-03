@@ -3,14 +3,15 @@ import UIKit
 
 final class ProfileService {
     static let shared = ProfileService()
-       private init () {}
+    private init () {}
     
     private(set) var profile: Profile?
+    private let urlSession = URLSession.shared
     
     func fetchProfile( token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
         guard let request = profileData(with: token) else {
-            print("нету запроса URLRequest")
+            print("[makeOAuthTokenRequest] - Ошибка запроса URLRequest ")
             return
         }
         
@@ -22,7 +23,7 @@ final class ProfileService {
             components.path = "/me"
             
             guard let url = components.url else {
-                print("нет верного url для запроса")
+                print("[profileData] - Нет верного запроса url ")
                 return nil
             }
             var request = URLRequest(url: url)
@@ -31,47 +32,26 @@ final class ProfileService {
             return request
         }
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-             
-            if let error = error {
-                completion(.failure(error))
-                print("Ошибка при получении данных: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                completion(.failure(NetworkError.urlSessionError))
-                print("Ошибка: 401 Unauthorized")
-                return
-            }
-            
-            guard let data = data else {
-                completion(.failure(NetworkError.urlSessionError))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let profileResult = try decoder.decode(ProfileResult.self, from: data)
-                
-                self.profile = Profile(userName: profileResult.username ?? "Нету данных",
-                                      firstName: profileResult.firstName ?? "Гость",
-                                      lastName: profileResult.lastName ?? "",
-                                      bio: profileResult.bio ?? ""
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+            switch result {
+            case .success(let profileResult):               
+                self?.profile = Profile(userName: profileResult.username ?? "Нету данных",
+                                        firstName: profileResult.firstName ?? "Гость",
+                                        lastName: profileResult.lastName ?? "",
+                                        bio: profileResult.bio ?? ""
                 )
-                guard let profile = self.profile else { return }
+                guard let profile = self?.profile else { return }
                 completion(.success(profile))
-                print("Профиль успешно загружен.")
-            } catch {
+                print("[urlSession] - Профиль получен")
+            case.failure(let error):
                 completion(.failure(error))
-                print("Ошибка декодирования JSON: \(error.localizedDescription)")
+                print("[urlSession] - Ошибка получение профиля: \(error) ")
             }
-            
         }
         task.resume()
-        
     }
     
 }
+
+
 

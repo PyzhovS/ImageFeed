@@ -39,15 +39,27 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                     print("Access Token: \(accessToken)")
                     UIBlockProgressHUD.dismiss()
                 case .failure(let error):
-                    print("Ошибка получения токена: \(error.localizedDescription)")
+                    print("Ошибка сети: \(error.localizedDescription)")
+                    guard let self else {return }
+                    self.showAlert()
                 }
             }
             guard let self else { return}
+            
             self.delegate?.authViewController(self)
+           
         }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
+    }
+    func showAlert() {
+        let alertController = UIAlertController(title: "Что-то пошло не так",
+                                                message: "Не удалось войти в систему",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+
     }
 }

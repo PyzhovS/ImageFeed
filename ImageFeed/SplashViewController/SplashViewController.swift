@@ -75,8 +75,8 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
                 self.profileImageService.fetchProfileImageURL(username: profile.userName) { _ in }
                 
-            case .failure:
-                // TODO [Sprint 11] Покажите ошибку получения профиля
+            case .failure(let error):
+                print("[fetchProfile] - Ошибка получение профиля: \(error) ")
                 break
             }
         }

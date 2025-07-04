@@ -58,6 +58,7 @@ final class ProfileViewController: UIViewController {
         if let profile = profileService.profile {
             updateProfileDetails(profile: profile)
         }
+        view.backgroundColor = .ypBlackIOS
         setupUI()
         
         profileImageServiceObserver = NotificationCenter.default

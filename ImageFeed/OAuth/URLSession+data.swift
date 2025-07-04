@@ -57,7 +57,6 @@ extension URLSession {
                         completion(.failure(error))
                         print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
                     }
-                    
                 }
             case .failure(let error):
                 DispatchQueue.main.async{

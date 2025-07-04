@@ -2,8 +2,9 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
+  
+    // MARK: - Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
@@ -19,30 +20,7 @@ final class SplashViewController: UIViewController {
         return imageView
     }()
     
-    
-    func setupUI() {
-        view.addSubview(imageView)
-        setupConstraint()
-    }
-    
-    func setupConstraint() {
-        NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 75),
-            imageView.heightAnchor.constraint(equalToConstant: 78),
-        ])
-    }
-    
-    func presentAuthViewController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController {
-            authViewController.delegate = self
-            authViewController.modalPresentationStyle = .fullScreen
-            present(authViewController, animated: true, completion: nil)
-        }
-    }
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -66,6 +44,32 @@ final class SplashViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
+    
+    // MARK: - Setup Methods
+    func setupUI() {
+        view.addSubview(imageView)
+        setupConstraint()
+    }
+    
+    func setupConstraint() {
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 75),
+            imageView.heightAnchor.constraint(equalToConstant: 78),
+        ])
+    }
+    
+    func presentAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController {
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true, completion: nil)
+        }
+    }
+    
+   
     
     private func switchToTabBarController() {
         DispatchQueue.main.async {

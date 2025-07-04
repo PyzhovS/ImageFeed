@@ -7,7 +7,6 @@ final class ProfileViewController: UIViewController {
     private let token = OAuth2TokenStorage.shared.token
     private var profileImageServiceObserver: NSObjectProtocol?
     
-    
     // MARK: - Properties
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -117,13 +116,11 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-  
     func updateProfileDetails(profile: Profile) {
         self.labelName.text = profile.name
         self.labelNik.text = profile.loginName
         self.labelComment.text = profile.bio
         self.imageView.image = profileImageService.image
     }
-    }
-    
+}
 

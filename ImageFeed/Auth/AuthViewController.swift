@@ -29,25 +29,22 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
     }
     
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        UIBlockProgressHUD.show()
         oAuth2Service.fetchOAuthToken(code: code) {[weak self] result in
             DispatchQueue.main.async {
+                guard let self else { return}
+                UIBlockProgressHUD.dismiss()
                 switch result {
                 case.success(let accessToken):
-                    guard let self else { return}
-                    UIBlockProgressHUD.show()
                     self.oAuth2TokenStorage.token = accessToken
                     print("Access Token: \(accessToken)")
-                    UIBlockProgressHUD.dismiss()
                 case .failure(let error):
                     print("Ошибка сети: \(error.localizedDescription)")
-                    guard let self else {return }
                     self.showAlert()
                 }
             }
             guard let self else { return}
-            
             self.delegate?.authViewController(self)
-           
         }
     }
     

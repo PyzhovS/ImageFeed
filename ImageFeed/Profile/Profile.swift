@@ -8,7 +8,6 @@ struct Profile {
     var name: String
     var loginName: String
     
-    
     init(userName: String, firstName: String, lastName: String, bio: String) {
         self.userName = userName
         self.firstName = firstName
@@ -16,11 +15,5 @@ struct Profile {
         self.bio = bio
         self.name = firstName + " " + lastName
         self.loginName = "@\(self.userName)"
-        
     }
-   
-    }
-    
-
-
-
+}

@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class ProfileService {
     static let shared = ProfileService()
     private init () {}
@@ -34,7 +33,7 @@ final class ProfileService {
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
-            case .success(let profileResult):               
+            case .success(let profileResult):
                 self?.profile = Profile(userName: profileResult.username ?? "Нету данных",
                                         firstName: profileResult.firstName ?? "Гость",
                                         lastName: profileResult.lastName ?? "",
@@ -50,8 +49,4 @@ final class ProfileService {
         }
         task.resume()
     }
-    
 }
-
-
-

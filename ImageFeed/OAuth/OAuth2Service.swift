@@ -46,7 +46,7 @@ final class OAuth2Service {
         assert(Thread.isMainThread)
         guard lastCode != code else {
             completion(.failure(AuthServiceError.invalidRequest))
-            print("[makeOAuthTokenRequest] - Ошибка запроса повторный код \(code) ")
+            print("[fetchOAuthToken] - Ошибка запроса повторный код \(code) ")
             return
             
         }
@@ -56,7 +56,7 @@ final class OAuth2Service {
         guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(AuthServiceError.invalidRequest))
             print("[fetchOAuthToken] - Ошибка запроса, не удалось создать запрос с кодом \(code)")
-           
+            
             return
         }
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in defer {
@@ -70,10 +70,8 @@ final class OAuth2Service {
             case .failure(let error):
                 completion(.failure(error))
                 print("[fetchOAuthToken] - Ошибка сети - \(error.localizedDescription)с кодом: \(code)")
-               
             }
-        }
-        
+        }        
         self.task = task
         task.resume()
     }

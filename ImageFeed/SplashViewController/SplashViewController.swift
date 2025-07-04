@@ -8,7 +8,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-    //private let authViewController = AuthViewController()
+    
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -27,13 +27,13 @@ final class SplashViewController: UIViewController {
     
     func setupConstraint() {
         NSLayoutConstraint.activate([
-            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 75),
             imageView.heightAnchor.constraint(equalToConstant: 78),
         ])
     }
- 
+    
     func presentAuthViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController {
@@ -77,8 +77,6 @@ final class SplashViewController: UIViewController {
     }
 }
 
-
-
 extension SplashViewController: AuthViewControllerDelegate {
     
     func authViewController(_ vc: AuthViewController) {
@@ -89,23 +87,23 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
             fetchProfile(token)
         }
-        }
+    }
     func fetchProfile(_ token: String ) {
         UIBlockProgressHUD.show()
         profileService.fetchProfile(token: token) { [weak self] result in
             UIBlockProgressHUD.dismiss()
             
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .success(let profile ):
                 self.switchToTabBarController()
                 self.profileImageService.fetchProfileImageURL(username: profile.userName) { _ in }
                 
-            case .failure:
-                // TODO [Sprint 11] Покажите ошибку получения профиля
+            case .failure(let error):
+                print("[fetchProfile] - Ошибка получение профиля: \(error) ")
                 break
             }
         }
     }
-    }
+}

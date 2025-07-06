@@ -26,6 +26,7 @@ final class SplashViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

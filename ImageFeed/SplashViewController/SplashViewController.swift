@@ -22,6 +22,7 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
+        view.backgroundColor = .ypBackgroundIOS
         super.viewDidLoad()
         setupUI()
         
@@ -86,10 +87,12 @@ extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController) {
         dismiss(animated: true) { [weak self] in
             guard let self else { return }
-            guard let token = oauth2TokenStorage.token else {
-                return
+            DispatchQueue.main.async{
+                guard let token = self.oauth2TokenStorage.token else {
+                    return
+                }
+                self.fetchProfile(token)
             }
-            fetchProfile(token)
         }
     }
     func fetchProfile(_ token: String ) {
@@ -105,9 +108,18 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.profileImageService.fetchProfileImageURL(username: profile.userName) { _ in }
                 
             case .failure(let error):
+                showAlert()
                 print("[fetchProfile] - Ошибка получение профиля: \(error) ")
                 break
             }
         }
+    }
+    func showAlert() {
+        let alertController = UIAlertController(title: "Что-то пошло не так",
+                                                message: "Не удалось войти в систему",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+
     }
 }

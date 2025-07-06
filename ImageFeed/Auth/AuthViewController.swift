@@ -37,14 +37,14 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                 switch result {
                 case.success(let accessToken):
                     self.oAuth2TokenStorage.token = accessToken
+                    self.delegate?.authViewController(self)
                     print("Access Token: \(accessToken)")
                 case .failure(let error):
                     print("Ошибка сети: \(error.localizedDescription)")
                     self.showAlert()
                 }
             }
-            guard let self else { return}
-            self.delegate?.authViewController(self)
+            
         }
     }
     

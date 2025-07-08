@@ -7,8 +7,15 @@ enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
+    private let urlSession = URLSession.shared
     static let shared = OAuth2Service()
+    private var task: URLSessionTask?
+    private var lastCode: String?
     private init() {}
     
     // MARK: - Setup Methods
@@ -27,7 +34,7 @@ final class OAuth2Service {
         ]
         
         guard let url = components.url else {
-            print("нет верного url для запроса")
+            print("[makeOAuthTokenRequest] - Ошибка запроса не верный URl ")
             return nil
         }
         
@@ -36,30 +43,36 @@ final class OAuth2Service {
         return request
     }
     func fetchOAuthToken ( code: String, completion: @escaping (Result<String, Error>)-> Void) {
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            print("[fetchOAuthToken] - Ошибка запроса повторный код \(code) ")
+            return
+            
+        }
+        task?.cancel()
+        lastCode = code
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(NSError(domain: "Ошибка URL", code: 0, userInfo: nil)))
-            print("Ошибка при созданий URLRequest")
+            completion(.failure(AuthServiceError.invalidRequest))
+            print("[fetchOAuthToken] - Ошибка запроса, не удалось создать запрос с кодом \(code)")
+            
             return
         }
-        let task = URLSession.shared.data(for: request) { result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in defer {
+            self?.task = nil
+            self?.lastCode = nil
+        }
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(response.accessToken))
-                    print("Декодирование JSON прошло успешно")
-                } catch {
-                    completion(.failure(NetworkError.urlSessionError))
-                    print("Ошибка не удалось декодировть JSON: \(error.localizedDescription)")
-                }
+            case .success(let response):
+                completion(.success(response.accessToken))
+                
             case .failure(let error):
                 completion(.failure(error))
-                print("Ошибка при получении запроса URLSession.shared.data: \(error.localizedDescription)")
+                print("[fetchOAuthToken] - Ошибка сети - \(error.localizedDescription)с кодом: \(code)")
             }
-        }
-        
+        }        
+        self.task = task
         task.resume()
     }
 }

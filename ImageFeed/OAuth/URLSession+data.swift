@@ -1,6 +1,6 @@
 import Foundation
 
-enum NetworkError: Error { 
+enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
@@ -27,11 +27,44 @@ extension URLSession {
                     }
                 } else if let error = error {
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
+                    print("Ошибка получение url \(error)")
                 } else {
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
+                    print("Ошибка получение url ")
                 }
             })
-            
+            task.resume()
             return task
         }
+    func objectTask<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> URLSessionTask {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let response = try decoder.decode(T.self, from: data)
+                    DispatchQueue.main.async{
+                        completion(.success(response))
+                        print("декодирование прошло успешно ")
+                    }
+                }
+                catch {
+                    DispatchQueue.main.async{
+                        completion(.failure(error))
+                        print("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                    }
+                }
+            case .failure(let error):
+                DispatchQueue.main.async{
+                    completion(.failure(error))
+                    print("получение данных \(error.localizedDescription)")
+                }
+            }
+        }
+        return task
+    }
 }

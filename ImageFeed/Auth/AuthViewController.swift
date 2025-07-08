@@ -41,10 +41,10 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                     print("Access Token: \(accessToken)")
                 case .failure(let error):
                     print("Ошибка сети: \(error.localizedDescription)")
+                    self.webViewViewControllerDidCancel(vc)
                     self.showAlert()
                 }
             }
-            
         }
     }
     

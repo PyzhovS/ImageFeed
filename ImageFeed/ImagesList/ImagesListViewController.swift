@@ -6,14 +6,15 @@ final class ImagesListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
  
     // MARK: - Properties
+    private let imagesListService = ImagesListService()
     private let showSingleImageIdentifier = "ShowSingleImage"
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private let currentDate = Date()
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        imagesListService.fetchPhotosNextPage()
     }
     // MARK: - Setup Methods
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
@@ -44,6 +45,15 @@ final class ImagesListViewController: UIViewController {
 }
 
 extension ImagesListViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == imagesListService.photos.count {
+            imagesListService.fetchPhotosNextPage()
+        }
+        print("indexPath \(indexPath.row)")
+        print(" photos\(imagesListService.photos.count)")
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         photosName.count
     }

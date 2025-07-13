@@ -21,7 +21,7 @@ final class ImagesListService {
         components.path = "/photos"
         components.queryItems = [
             URLQueryItem(name: "page", value: "\(nextPage)"),
-            URLQueryItem(name: "per_page", value: "1")
+            URLQueryItem(name: "per_page", value: "10")
         ]
         
         guard let url = components.url else {
@@ -51,12 +51,12 @@ final class ImagesListService {
                     self?.photos.append(contentsOf: newPhotos)
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                     self?.lastLoadedPage = nextPage
-                    print(self?.photos[0].isLiked)
-                    print(self?.photos[0].id)
-                    print(self?.photos[0].largeImageURL)
-                    print(self?.photos[0].welcomeDescription)
-                    print(self?.photos[0].createdAt)
-                    print(self?.photos[0].size)
+                   // print(self?.photos[0].isLiked)
+                   // print(self?.photos[0].id)
+                   // print(self?.photos[0].largeImageURL)
+                 //   print(self?.photos[0].welcomeDescription)
+                  //  print(self?.photos[0].createdAt)
+                  //  print(self?.photos[0].size)
                 }
                 
             case.failure(let error):

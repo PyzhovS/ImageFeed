@@ -8,9 +8,6 @@ final class ImagesListService {
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     
-
-    
-    
     func fetchPhotosNextPage() {
         guard let token = oAuth2TokenStorage.token else { return}
         let nextPage = (self.lastLoadedPage ?? 0) + 1
@@ -62,9 +59,7 @@ final class ImagesListService {
             case.failure(let error):
                 print("[fetchProfileImageURL] - Ошибка декодирования JSON: \(error.localizedDescription)")
             }
-          
         }
         task.resume()
-        
     }
 }

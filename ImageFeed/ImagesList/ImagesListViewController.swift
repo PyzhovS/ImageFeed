@@ -25,40 +25,17 @@ final class ImagesListViewController: UIViewController {
             object: nil
         )
     }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     // MARK: - Setup Methods
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        var image: UIImage?
+   
         let photo = photos[indexPath.row]
-        let processor = RoundCornerImageProcessor(cornerRadius: 0)
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        let nitralPhoto = UIImage(named: "Stuboff")
-        if let url = URL(string: photo.thumbImageURL) {
-            imageView.kf.indicatorType = .activity
-            imageView.kf.setImage(
-                with: url,
-                placeholder: nitralPhoto,
-                options: [.processor(processor)],
-                completionHandler: { result in
-                    switch result {
-                    case .success(let value):
-                        image = value.image
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    case .failure(let error):
-                        print("Error loading image: \(error)")
-                    }
-                }
-            )
-        }
-        guard let image else { image = nitralPhoto
-            return
-        }
-        cell.configure(image:image ,
-                       date: DateFormatter.longStyle.string(from: photo.createdAt!),
-                       likes: photo.isLiked)
+        guard let url = URL(string: photo.thumbImageURL) else { return }
+  
+        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked, tableView: tableView, indexPath: indexPath)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,14 +44,12 @@ final class ImagesListViewController: UIViewController {
             return
         }
         guard
-            let viewController = segue.destination as? SingleImageViewController, // 2
+            let viewController = segue.destination as? SingleImageViewController,
             let indexPath = sender as? IndexPath
         else {
             assertionFailure("Invalid segue destination")
             return
         }
-        
-        // let image = UIImage(named: photos[indexPath.row].largeImageURL)
         viewController.image = image
     }
     
@@ -96,7 +71,7 @@ final class ImagesListViewController: UIViewController {
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == imagesListService.photos.count {
+        if indexPath.row + 1 == imagesListService.photos.count  {
             imagesListService.fetchPhotosNextPage()
         }
         print("indexPath \(indexPath.row)")

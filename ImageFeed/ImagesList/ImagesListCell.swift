@@ -22,7 +22,7 @@ final class ImagesListCell: UITableViewCell {
     let noActiveImage = UIImage(named: "No Active")
 
     // MARK: - Setup Methods
-    func configure (with url: URL, date: String, likes: Bool, tableView : UITableView! ,indexPath: IndexPath ) {
+    func configure (with url: URL, date: String, likes: Bool ) {
        
         dateLabel.text = date
        
@@ -39,7 +39,7 @@ final class ImagesListCell: UITableViewCell {
             completionHandler: { result in
                 switch result {
                 case .success:
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                   print("Данные успешно загружаны ")
                 case .failure(let error):
                     print("Error loading image: \(error)")
                 }

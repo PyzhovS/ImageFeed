@@ -9,6 +9,7 @@ final class SplashViewController: UIViewController {
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let imagesListService = ImagesListService()
     
     
     private lazy var imageView: UIImageView = {
@@ -33,6 +34,7 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         if let token = oauth2TokenStorage.token  {
             fetchProfile(token)
+
         } else {
             presentAuthViewController()
         }
@@ -71,8 +73,6 @@ final class SplashViewController: UIViewController {
         }
     }
     
-   
-    
     private func switchToTabBarController() {
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
@@ -93,6 +93,8 @@ extension SplashViewController: AuthViewControllerDelegate {
                     return
                 }
                 self.fetchProfile(token)
+                
+                
             }
         }
     }

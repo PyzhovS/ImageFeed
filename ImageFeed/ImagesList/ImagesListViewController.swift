@@ -16,8 +16,9 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imagesListService.fetchPhotosNextPage()
+            imagesListService.fetchPhotosNextPage()
         
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateTableViewAnimated),
@@ -35,7 +36,7 @@ final class ImagesListViewController: UIViewController {
         let photo = photos[indexPath.row]
         guard let url = URL(string: photo.thumbImageURL) else { return }
   
-        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked, tableView: tableView, indexPath: indexPath)
+        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

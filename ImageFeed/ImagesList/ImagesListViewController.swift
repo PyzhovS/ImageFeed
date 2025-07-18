@@ -3,11 +3,9 @@ import Kingfisher
 
 protocol ImagesList {
     var photos: [Photo] { get set }
-    var tableView: UITableView! { get set }
 }
 
 final class ImagesListViewController: UIViewController,ImagesList {
-    
     
     @IBOutlet var tableView: UITableView!
     
@@ -42,6 +40,18 @@ final class ImagesListViewController: UIViewController,ImagesList {
         guard let url = URL(string: photo.thumbImageURL) else { return }
         
         cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked,photoId: photo.id, service: imagesListService,indexPath: indexPath )
+        
+        cell.likeButtonAction = { [weak self] in
+            guard let self = self else { return }
+            self.toggleLike(at: indexPath)
+        }
+    }
+  private func toggleLike(at indexPath: IndexPath) {
+        var photo = photos[indexPath.row]
+        photo.isLiked.toggle()
+        photos[indexPath.row] = photo
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

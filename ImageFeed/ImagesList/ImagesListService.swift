@@ -1,13 +1,13 @@
 import UIKit
 
 final class ImagesListService {
-
+    
     private var lastLoadedPage: Int?
     private(set) var photos: [Photo] = []
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-     
+    
     func fetchPhotosNextPage() {
         guard let token = oAuth2TokenStorage.token else { return}
         let nextPage = (self.lastLoadedPage ?? 0) + 1
@@ -48,12 +48,6 @@ final class ImagesListService {
                     self?.photos.append(contentsOf: newPhotos)
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                     self?.lastLoadedPage = nextPage
-                   // print(self?.photos[0].isLiked)
-                    // print(self?.photos[0].id)
-                    // print(self?.photos[0].largeImageURL)
-                    //   print(self?.photos[0].welcomeDescription)
-                    //  print(self?.photos[0].createdAt)
-                    //  print(self?.photos[0].size)
                 }
                 
             case.failure(let error):
@@ -80,23 +74,23 @@ final class ImagesListService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = urlSession.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    print("[changeLike] - Ошибка сети: \(error.localizedDescription)")
-                    completion(.failure(error))
-                    return
+            if let error = error {
+                print("[changeLike] - Ошибка сети: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("[changeLike] - Код ответа: \(httpResponse.statusCode)")
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                if let data = data, let responseBody = String(data: data, encoding: .utf8) {
+                    print("[changeLike] - Ошибка сервера: \(responseBody)")
                 }
-
-                if let httpResponse = response as? HTTPURLResponse {
-                    print("[changeLike] - Код ответа: \(httpResponse.statusCode)")
-                }
-
-                guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-                    if let data = data, let responseBody = String(data: data, encoding: .utf8) {
-                        print("[changeLike] - Ошибка сервера: \(responseBody)")
-                    }
-                    completion(.failure(NSError(domain: "Invalid response", code: 500, userInfo: nil)))
-                    return
-                }
+                completion(.failure(NSError(domain: "Invalid response", code: 500, userInfo: nil)))
+                return
+            }
             DispatchQueue.main.async {
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                     let photo = self.photos[index]
@@ -109,14 +103,11 @@ final class ImagesListService {
                         largeImageURL: photo.largeImageURL,
                         isLiked: !photo.isLiked
                     )
-                    
                     self.photos[index] = newPhoto
                 }
             }
-                completion(.success(()))
-            }
-
-            task.resume()
+            completion(.success(()))
         }
+        task.resume()
+    }
 }
-

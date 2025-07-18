@@ -1,10 +1,15 @@
 import UIKit
 import Kingfisher
 
-final class ImagesListViewController: UIViewController {
+protocol ImagesList {
+    var photos: [Photo] { get set }
+    var tableView: UITableView! { get set }
+}
+
+final class ImagesListViewController: UIViewController,ImagesList {
     
     
-    @IBOutlet private var tableView: UITableView!
+    @IBOutlet var tableView: UITableView!
     
     // MARK: - Properties
     private let imagesListService = ImagesListService()
@@ -16,9 +21,9 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-            imagesListService.fetchPhotosNextPage()
+        imagesListService.fetchPhotosNextPage()
         
-
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateTableViewAnimated),
@@ -32,11 +37,11 @@ final class ImagesListViewController: UIViewController {
     }
     // MARK: - Setup Methods
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-   
+        
         let photo = photos[indexPath.row]
         guard let url = URL(string: photo.thumbImageURL) else { return }
-  
-        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked)
+        
+        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked,photoId: photo.id, service: imagesListService,indexPath: indexPath )
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -67,6 +72,7 @@ final class ImagesListViewController: UIViewController {
             } completion: { _ in }
         }
     }
+    
 }
 
 extension ImagesListViewController: UITableViewDataSource {

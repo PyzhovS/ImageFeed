@@ -40,6 +40,7 @@ final class ImagesListService {
                                  welcomeDescription: result.description,
                                  thumbImageURL: result.urls.thumb,
                                  largeImageURL: result.urls.regular,
+                                 fullUmageUrl: result.urls.full,
                                  isLiked: result.likedByUser)
                 }
                 print("[photoResults] -  получены фотографии")
@@ -101,6 +102,7 @@ final class ImagesListService {
                         welcomeDescription: photo.welcomeDescription,
                         thumbImageURL: photo.thumbImageURL,
                         largeImageURL: photo.largeImageURL,
+                        fullUmageUrl: photo.fullUmageUrl,
                         isLiked: !photo.isLiked
                     )
                     self.photos[index] = newPhoto

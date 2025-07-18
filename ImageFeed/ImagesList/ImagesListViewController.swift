@@ -66,7 +66,29 @@ final class ImagesListViewController: UIViewController,ImagesList {
             assertionFailure("Invalid segue destination")
             return
         }
-        viewController.image = image
+        let photo = photos[indexPath.row]
+        let photoSet = UIImage(named:"Stuboff")
+        let imageFull = UIImageView()
+        UIBlockProgressHUD.show()
+        guard let url = URL(string: photo.fullUmageUrl) else { return }
+        imageFull.kf.setImage(
+            with: url,
+            placeholder: photoSet,
+            options: [. transition(. fade(0.2))],
+            completionHandler: { result in
+                switch result {
+                case .success(let imageFull):
+                    viewController.image = imageFull.image
+                    print("фотография Full успешна загружена ")
+                    UIBlockProgressHUD.dismiss()
+                case .failure(let error):
+                    print("Ошибка загрузки фотографии Full: \(error)")
+                    UIBlockProgressHUD.dismiss()
+                }
+            }
+        )
+        
+    //    viewController.image = imageFull.image
     }
     
     @objc func updateTableViewAnimated() {

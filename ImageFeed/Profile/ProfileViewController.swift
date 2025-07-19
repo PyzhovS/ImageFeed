@@ -80,7 +80,6 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
     }
-    let exit = 
     func setupUI() {
         view.addSubview(imageView)
         view.addSubview(labelName)

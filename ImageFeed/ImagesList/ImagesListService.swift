@@ -58,7 +58,7 @@ final class ImagesListService {
         task.resume()
     }
     
-    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(photoId: String, indexPatch: IndexPath, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let token = oAuth2TokenStorage.token else { return}
         var components = URLComponents()

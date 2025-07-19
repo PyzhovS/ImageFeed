@@ -6,6 +6,7 @@ final class ProfileViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     private let token = OAuth2TokenStorage.shared.token
     private var profileImageServiceObserver: NSObjectProtocol?
+    private var profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - Properties
     private lazy var imageView: UIImageView = {
@@ -79,7 +80,7 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
     }
-    
+    let exit = 
     func setupUI() {
         view.addSubview(imageView)
         view.addSubview(labelName)

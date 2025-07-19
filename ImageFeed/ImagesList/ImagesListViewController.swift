@@ -1,11 +1,9 @@
 import UIKit
 import Kingfisher
 
-protocol ImagesList {
-    var photos: [Photo] { get set }
-}
 
-final class ImagesListViewController: UIViewController,ImagesList {
+
+final class ImagesListViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
@@ -15,13 +13,13 @@ final class ImagesListViewController: UIViewController,ImagesList {
     private let currentDate = Date()
     var photos: [Photo] = []
     var image: UIImage?
+  
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imagesListService.fetchPhotosNextPage()
-        
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateTableViewAnimated),
@@ -33,25 +31,38 @@ final class ImagesListViewController: UIViewController,ImagesList {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
     // MARK: - Setup Methods
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         
         let photo = photos[indexPath.row]
         guard let url = URL(string: photo.thumbImageURL) else { return }
         
-        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked,photoId: photo.id, service: imagesListService,indexPath: indexPath )
+        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked)
         
         cell.likeButtonAction = { [weak self] in
             guard let self = self else { return }
-            self.toggleLike(at: indexPath)
+            let isLikes = cell.likeButton.currentImage == cell.noActiveImage
+            UIBlockProgressHUD.show()
+            imagesListService.changeLike(photoId: photo.id,indexPatch: indexPath, isLike: isLikes) { result in
+                let indexPatch = indexPath
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                    print("Лайк успешно изменён.")
+                    self.photos = self.imagesListService.photos
+                    var newLikeImage: UIImage?
+                    let likes = self.photos[indexPatch.row].isLiked
+                    newLikeImage = likes ? cell.activeImage : cell.noActiveImage
+                        cell.likeButton.setImage(newLikeImage, for: .normal)
+                        UIBlockProgressHUD.dismiss()
+                    }
+                case .failure(let error):
+                    print("Ошибка изменения лайка: \(error.localizedDescription)")
+                    UIBlockProgressHUD.dismiss()
+                }
+            }
         }
-    }
-  private func toggleLike(at indexPath: IndexPath) {
-        var photo = photos[indexPath.row]
-        photo.isLiked.toggle()
-        photos[indexPath.row] = photo
-        
-        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -66,29 +77,46 @@ final class ImagesListViewController: UIViewController,ImagesList {
             assertionFailure("Invalid segue destination")
             return
         }
+        
+        imageLoadedFull()
+        
+        func imageLoadedFull() {
         let photo = photos[indexPath.row]
         let photoSet = UIImage(named:"Stuboff")
         let imageFull = UIImageView()
         UIBlockProgressHUD.show()
         guard let url = URL(string: photo.fullUmageUrl) else { return }
-        imageFull.kf.setImage(
-            with: url,
-            placeholder: photoSet,
-            options: [. transition(. fade(0.2))],
-            completionHandler: { result in
-                switch result {
-                case .success(let imageFull):
-                    viewController.image = imageFull.image
-                    print("фотография Full успешна загружена ")
-                    UIBlockProgressHUD.dismiss()
-                case .failure(let error):
-                    print("Ошибка загрузки фотографии Full: \(error)")
-                    UIBlockProgressHUD.dismiss()
+            imageFull.kf.setImage(
+                with: url,
+                placeholder: photoSet,
+                options: [. transition(. fade(0.2))],
+                completionHandler: { result in
+                    switch result {
+                    case .success(let imageFull):
+                        viewController.image = imageFull.image
+                        print("фотография Full успешна загружена ")
+                        UIBlockProgressHUD.dismiss()
+                    case .failure(let error):DispatchQueue.main.async {
+                        showError()
+                    }
+                        print("Ошибка загрузки фотографии Full: \(error)")
+                        UIBlockProgressHUD.dismiss()
+                    }
                 }
+            )
+        }
+     
+        func showError(){
+            let alert = UIAlertController(title: "Что-то пошло не так", message: "Попробовать ещё раз?", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Не надо", style: .cancel, handler: nil)
+            let retryAction = UIAlertAction(title: "Повторить", style: .default) { _ in
+                imageLoadedFull()
             }
-        )
-        
-    //    viewController.image = imageFull.image
+            alert.addAction(cancelAction)
+            alert.addAction(retryAction)
+            
+            viewController.present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func updateTableViewAnimated() {

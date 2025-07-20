@@ -133,13 +133,13 @@ final class ProfileViewController: UIViewController {
     func alertExit(){
       
             let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
-        let retryAction = UIAlertAction(title: "Да", style: .cancel) { _ in
+        let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
                 self.profileLogoutService.logout()
             }
-        let cancelAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        let exitProfileNo = UIAlertAction(title: "Нет", style: .default, handler: nil)
             
-        alert.addAction(retryAction)
-        alert.addAction(cancelAction)
+        alert.addAction(exitProfileYes)
+        alert.addAction(exitProfileNo)
         
         present(alert, animated: true, completion: nil)
         

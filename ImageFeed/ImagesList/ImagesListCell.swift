@@ -13,7 +13,9 @@ final class ImagesListCell: UITableViewCell {
     var setIsLiked: (() -> Void)?
     
     @IBAction private func likeTapped() {
-        setIsLiked!()
+        if let setIsLiked = setIsLiked {
+            setIsLiked()
+        }
         
     }
     override func prepareForReuse() {

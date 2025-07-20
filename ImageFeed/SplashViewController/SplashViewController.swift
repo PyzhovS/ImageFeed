@@ -26,15 +26,12 @@ final class SplashViewController: UIViewController {
         view.backgroundColor = .ypBackgroundIOS
         super.viewDidLoad()
         setupUI()
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let token = oauth2TokenStorage.token  {
             fetchProfile(token)
-
         } else {
             presentAuthViewController()
         }
@@ -93,7 +90,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                     return
                 }
                 self.fetchProfile(token)
-                
                 
             }
         }

@@ -1,4 +1,5 @@
 import UIKit
+import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -88,6 +89,8 @@ final class ProfileViewController: UIViewController {
         view.addSubview(exitButton)
         
         setupConstraint()
+        
+        exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
     }
     
     func setupConstraint() {
@@ -122,5 +125,9 @@ final class ProfileViewController: UIViewController {
         self.labelComment.text = profile.bio
         self.imageView.image = profileImageService.image
     }
-}
-
+    
+    @objc private func exitButtonTapped() {
+        print("Нажал кнопку выхода")
+        profileLogoutService.logout()
+        }
+    }

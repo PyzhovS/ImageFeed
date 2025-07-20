@@ -1,9 +1,13 @@
 import UIKit
 
-final class ImagesListService {
+protocol PhotoDeleteDelegate{
+  var photos: [Photo] {set get }
+}
+
+final class ImagesListService: PhotoDeleteDelegate {
     
     private var lastLoadedPage: Int?
-    private(set) var photos: [Photo] = []
+    var photos: [Photo] = []
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")

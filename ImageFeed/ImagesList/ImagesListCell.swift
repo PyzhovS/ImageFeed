@@ -10,10 +10,10 @@ final class ImagesListCell: UITableViewCell {
     
     private var imageDownloadTask: DownloadTask?
     
-    var likeButtonAction: (() -> Void)?
+    var setIsLiked: (() -> Void)?
     
     @IBAction private func likeTapped() {
-        likeButtonAction!()
+        setIsLiked!()
         
     }
     override func prepareForReuse() {

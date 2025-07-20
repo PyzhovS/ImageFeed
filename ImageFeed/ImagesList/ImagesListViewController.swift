@@ -38,9 +38,9 @@ final class ImagesListViewController: UIViewController {
         let photo = photos[indexPath.row]
         guard let url = URL(string: photo.thumbImageURL) else { return }
         
-        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt!), likes: photo.isLiked)
+        cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt), likes: photo.isLiked)
         
-        cell.likeButtonAction = { [weak self] in
+        cell.setIsLiked = { [weak self] in
             guard let self = self else { return }
             let isLikes = cell.likeButton.currentImage == cell.noActiveImage
             UIBlockProgressHUD.show()
@@ -179,7 +179,7 @@ extension ImagesListViewController: UITableViewDelegate {
 extension DateFormatter {
     static let longStyle: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
+        formatter.dateStyle = .medium
         formatter.timeStyle = .none
         return formatter
     }()

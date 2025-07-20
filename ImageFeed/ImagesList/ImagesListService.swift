@@ -40,7 +40,7 @@ final class ImagesListService: PhotoDeleteDelegate {
                     let size = CGSize(width: result.width, height: result.height)
                     return Photo(id: result.id,
                                  size: size,
-                                 createdAt: result.createdAt,
+                                 createdAt: result.createdAt ?? Date(),
                                  welcomeDescription: result.description,
                                  thumbImageURL: result.urls.thumb,
                                  largeImageURL: result.urls.regular,

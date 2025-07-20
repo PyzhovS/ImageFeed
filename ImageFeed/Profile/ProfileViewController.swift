@@ -128,6 +128,20 @@ final class ProfileViewController: UIViewController {
     
     @objc private func exitButtonTapped() {
         print("Нажал кнопку выхода")
-        profileLogoutService.logout()
+        alertExit()
         }
+    func alertExit(){
+      
+            let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        let retryAction = UIAlertAction(title: "Да", style: .cancel) { _ in
+                self.profileLogoutService.logout()
+            }
+        let cancelAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+            
+        alert.addAction(retryAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
+        
     }
+}

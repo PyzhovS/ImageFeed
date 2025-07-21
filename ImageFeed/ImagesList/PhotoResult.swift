@@ -13,6 +13,5 @@ struct PhotoResult: Codable {
         let thumb: String
         let regular: String
         let full: String
-        
     }
 }

@@ -13,13 +13,13 @@ final class ImagesListViewController: UIViewController {
     private let currentDate = Date()
     var photos: [Photo] = []
     var image: UIImage?
-  
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imagesListService.fetchPhotosNextPage()
-
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateTableViewAnimated),
@@ -49,11 +49,11 @@ final class ImagesListViewController: UIViewController {
                 switch result {
                 case .success:
                     DispatchQueue.main.async {
-                    print("Лайк успешно изменён.")
-                    self.photos = self.imagesListService.photos
-                    var newLikeImage: UIImage?
-                    let likes = self.photos[indexPatch.row].isLiked
-                    newLikeImage = likes ? cell.activeImage : cell.noActiveImage
+                        print("Лайк успешно изменён.")
+                        self.photos = self.imagesListService.photos
+                        var newLikeImage: UIImage?
+                        let likes = self.photos[indexPatch.row].isLiked
+                        newLikeImage = likes ? cell.activeImage : cell.noActiveImage
                         cell.likeButton.setImage(newLikeImage, for: .normal)
                         UIBlockProgressHUD.dismiss()
                     }
@@ -81,11 +81,11 @@ final class ImagesListViewController: UIViewController {
         imageLoadedFull()
         
         func imageLoadedFull() {
-        let photo = photos[indexPath.row]
-        let photoSet = UIImage(named:"Stuboff")
-        let imageFull = UIImageView()
-        UIBlockProgressHUD.show()
-        guard let url = URL(string: photo.fullUmageUrl) else { return }
+            let photo = photos[indexPath.row]
+            let photoSet = UIImage(named:"Stuboff")
+            let imageFull = UIImageView()
+            UIBlockProgressHUD.show()
+            guard let url = URL(string: photo.fullUmageUrl) else { return }
             imageFull.kf.setImage(
                 with: url,
                 placeholder: photoSet,
@@ -105,7 +105,7 @@ final class ImagesListViewController: UIViewController {
                 }
             )
         }
-     
+        
         func showError(){
             let alert = UIAlertController(title: "Что-то пошло не так", message: "Попробовать ещё раз?", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Не надо", style: .cancel, handler: nil)

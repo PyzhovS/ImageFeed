@@ -2,7 +2,7 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
-  
+    
     // MARK: - Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2Service = OAuth2Service.shared
@@ -119,6 +119,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alertController, animated: true, completion: nil)
-
+        
     }
 }

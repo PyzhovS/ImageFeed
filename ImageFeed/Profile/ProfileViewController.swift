@@ -129,19 +129,18 @@ final class ProfileViewController: UIViewController {
     @objc private func exitButtonTapped() {
         print("Нажал кнопку выхода")
         alertExit()
-        }
+    }
     func alertExit(){
-      
-            let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        
+        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
-                self.profileLogoutService.logout()
-            }
+            self.profileLogoutService.logout()
+        }
         let exitProfileNo = UIAlertAction(title: "Нет", style: .default, handler: nil)
-            
+        
         alert.addAction(exitProfileYes)
         alert.addAction(exitProfileNo)
         
         present(alert, animated: true, completion: nil)
-        
     }
 }

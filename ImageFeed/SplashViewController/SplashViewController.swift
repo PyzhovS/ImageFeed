@@ -2,13 +2,14 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
-  
+    
     // MARK: - Properties
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let imagesListService = ImagesListService()
     
     
     private lazy var imageView: UIImageView = {
@@ -25,8 +26,6 @@ final class SplashViewController: UIViewController {
         view.backgroundColor = .ypBackgroundIOS
         super.viewDidLoad()
         setupUI()
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,8 +70,6 @@ final class SplashViewController: UIViewController {
         }
     }
     
-   
-    
     private func switchToTabBarController() {
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
@@ -93,6 +90,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                     return
                 }
                 self.fetchProfile(token)
+                
             }
         }
     }
@@ -121,6 +119,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alertController, animated: true, completion: nil)
-
+        
     }
 }

@@ -1,4 +1,5 @@
 import UIKit
+import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
     
@@ -6,6 +7,7 @@ final class ProfileViewController: UIViewController {
     private let profileImageService = ProfileImageService.shared
     private let token = OAuth2TokenStorage.shared.token
     private var profileImageServiceObserver: NSObjectProtocol?
+    private var profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - Properties
     private lazy var imageView: UIImageView = {
@@ -79,7 +81,6 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
     }
-    
     func setupUI() {
         view.addSubview(imageView)
         view.addSubview(labelName)
@@ -88,6 +89,8 @@ final class ProfileViewController: UIViewController {
         view.addSubview(exitButton)
         
         setupConstraint()
+        
+        exitButton.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
     }
     
     func setupConstraint() {
@@ -122,5 +125,22 @@ final class ProfileViewController: UIViewController {
         self.labelComment.text = profile.bio
         self.imageView.image = profileImageService.image
     }
+    
+    @objc private func exitButtonTapped() {
+        print("Нажал кнопку выхода")
+        alertExit()
+    }
+    func alertExit(){
+        
+        let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
+            self.profileLogoutService.logout()
+        }
+        let exitProfileNo = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        
+        alert.addAction(exitProfileYes)
+        alert.addAction(exitProfileNo)
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
-

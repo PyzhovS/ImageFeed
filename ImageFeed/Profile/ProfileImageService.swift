@@ -7,7 +7,7 @@ final class ProfileImageService {
     
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
-    private (set) var avatarURL: String?
+    var avatarURL: String?
     private let urlSession = URLSession.shared
     var image = UIImage()
     

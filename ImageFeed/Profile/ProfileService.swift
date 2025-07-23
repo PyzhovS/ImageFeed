@@ -4,7 +4,7 @@ final class ProfileService {
     static let shared = ProfileService()
     private init () {}
     
-    private(set) var profile: Profile?
+    var profile: Profile?
     private let urlSession = URLSession.shared
     
     func fetchProfile( token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
@@ -34,8 +34,8 @@ final class ProfileService {
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
             case .success(let profileResult):
-                self?.profile = Profile(userName: profileResult.username ?? "Нету данных",
-                                        firstName: profileResult.firstName ?? "Гость",
+                self?.profile = Profile(userName: profileResult.username ?? "",
+                                        firstName: profileResult.firstName ?? "",
                                         lastName: profileResult.lastName ?? "",
                                         bio: profileResult.bio ?? ""
                 )

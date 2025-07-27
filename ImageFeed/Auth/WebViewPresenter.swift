@@ -15,7 +15,7 @@ class WebViewPresenter: WebViewPresenterProtocol {
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
- 
+    
     func code(from url: URL) -> String? {
         authHelper.code(from: url)
     }
@@ -25,21 +25,21 @@ class WebViewPresenter: WebViewPresenterProtocol {
             return
         }
         
-       didUpdateProgressValue(0)
+        didUpdateProgressValue(0)
         view?.load(request: request)
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
-            let newProgressValue = Float(newValue)
-            view?.setProgressValue(newProgressValue)
-            
-            let shouldHideProgress = shouldHideProgress(for: newProgressValue)
-            view?.setProgressHidden(shouldHideProgress)
-        }
+        let newProgressValue = Float(newValue)
+        view?.setProgressValue(newProgressValue)
         
-        func shouldHideProgress(for value: Float) -> Bool {
-            abs(value - 1.0) <= 0.0001
-        }
+        let shouldHideProgress = shouldHideProgress(for: newProgressValue)
+        view?.setProgressHidden(shouldHideProgress)
+    }
+    
+    func shouldHideProgress(for value: Float) -> Bool {
+        abs(value - 1.0) <= 0.0001
+    }
     
     weak var view: (any WebViewViewControllerProtocol)?
     

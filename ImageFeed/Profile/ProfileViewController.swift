@@ -8,7 +8,7 @@ public protocol ProfileView: AnyObject {
 
 
 final class ProfileViewController: UIViewController, ProfileView {
-   
+    
     
     private var presenter: ProfilePresenterProtocol!
     private let profileService = ProfileService.shared
@@ -18,7 +18,7 @@ final class ProfileViewController: UIViewController, ProfileView {
     private var profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - Properties
-     lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         if let avatarImage = UIImage(named: "avatar") {
             imageView.image = avatarImage
@@ -26,7 +26,7 @@ final class ProfileViewController: UIViewController, ProfileView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-     lazy var labelName: UILabel = {
+    lazy var labelName: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = .ypWhiteIOS
@@ -34,7 +34,7 @@ final class ProfileViewController: UIViewController, ProfileView {
         label.font = UIFont.boldSystemFont(ofSize: 23)
         return label
     }()
-     lazy var labelNik: UILabel = {
+    lazy var labelNik: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.textColor = .ypGrayIOS
@@ -43,7 +43,7 @@ final class ProfileViewController: UIViewController, ProfileView {
         return label
     }()
     
-     lazy var labelComment: UILabel = {
+    lazy var labelComment: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.textColor = .ypWhiteIOS
@@ -64,7 +64,7 @@ final class ProfileViewController: UIViewController, ProfileView {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    //    presenter = ProfilePresenter(view: self)
+        //    presenter = ProfilePresenter(view: self)
         presenter.viewDidLoad()
         view.backgroundColor = .ypBlackIOS
         setupUI()
@@ -83,9 +83,9 @@ final class ProfileViewController: UIViewController, ProfileView {
     }
     // MARK: - Setup Methods
     func configure(_ presenter: ProfilePresenterProtocol) {
-             self.presenter = presenter
         self.presenter = presenter
-         }
+        self.presenter = presenter
+    }
     
     func updateAvatar() {
         guard
@@ -136,10 +136,10 @@ final class ProfileViewController: UIViewController, ProfileView {
                         bio: String,
                         image: UIImage?)
     {
-               labelName.text = name
-               labelNik.text = loginName
-               labelComment.text = bio
-               imageView.image = image
+        labelName.text = name
+        labelNik.text = loginName
+        labelComment.text = bio
+        imageView.image = image
     }
     
     func showLogoutConfirmation() {

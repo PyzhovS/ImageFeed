@@ -1,10 +1,10 @@
 import UIKit
 
 protocol PhotoDeleteDelegate{
-  var photos: [Photo] {set get }
+  var photos: [Photo] { get set }
 }
 
-final class ImagesListService: PhotoDeleteDelegate {
+class ImagesListService: PhotoDeleteDelegate {
     
     private var lastLoadedPage: Int?
     var photos: [Photo] = []

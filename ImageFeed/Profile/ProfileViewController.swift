@@ -6,7 +6,6 @@ public protocol ProfileView: AnyObject {
     func showLogoutConfirmation()
 }
 
-
 final class ProfileViewController: UIViewController, ProfileView {
     
     
@@ -83,7 +82,6 @@ final class ProfileViewController: UIViewController, ProfileView {
     }
     // MARK: - Setup Methods
     func configure(_ presenter: ProfilePresenterProtocol) {
-        self.presenter = presenter
         self.presenter = presenter
     }
     

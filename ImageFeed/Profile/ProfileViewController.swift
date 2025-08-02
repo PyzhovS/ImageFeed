@@ -53,7 +53,7 @@ final class ProfileViewController: UIViewController, ProfileView {
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
-        button.accessibilityIdentifier = "e"
+        button.accessibilityIdentifier = "exitButton"
         if let exitImage = UIImage(named: "Exit") {
             button.setImage(exitImage, for: .normal)
         }
@@ -152,9 +152,11 @@ final class ProfileViewController: UIViewController, ProfileView {
     func alertExit(){
         
         let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+    
         let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
             self.profileLogoutService.logout()
         }
+        exitProfileYes.accessibilityIdentifier = "exitYes"
         let exitProfileNo = UIAlertAction(title: "Нет", style: .default, handler: nil)
         
         alert.addAction(exitProfileYes)

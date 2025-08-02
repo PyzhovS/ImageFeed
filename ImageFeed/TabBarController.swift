@@ -6,24 +6,30 @@ final class TabBarController: UITabBarController {
         
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
-      guard let imagesListViewController = storyboard.instantiateViewController(
+        // ImagesListViewController setup
+        guard let imagesListViewController = storyboard.instantiateViewController(
             withIdentifier: "ImagesListViewController"
-      ) as? ImagesListViewController else {
-          assertionFailure("Failler to ImagesListViewController ")
-          return
-      }
+        ) as? ImagesListViewController else { return }
+        
+        let imagesListService = ImagesListService()
+        let imagesListPresenter = ImagesListViewPresenter(
+            service: imagesListService,
+            view: imagesListViewController
+        )
+        imagesListViewController.presenter = imagesListPresenter
+        
+        
         let profileViewController = ProfileViewController()
-        let presenter = ProfilePresenter()
-        profileViewController.configure(presenter)
-        presenter.view = profileViewController        
-               let imagesListService = ImagesListService()
-               let imagePresenter = ImagesListViewPresenter(service: imagesListService)
-             imagesListViewController.configure(imagePresenter)
-               imagePresenter.view = imagesListViewController
+        let profilePresenter = ProfilePresenter()
+        profileViewController.configure(profilePresenter)
+        profilePresenter.view = profileViewController
+        
+        
         profileViewController.tabBarItem = UITabBarItem(
             title: "",
             image: UIImage(named: "tab_profile_active"),
-            selectedImage: nil)
+            selectedImage: nil
+        )
         
         self.viewControllers = [imagesListViewController, profileViewController]
     }

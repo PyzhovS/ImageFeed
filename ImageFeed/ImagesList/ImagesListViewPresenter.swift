@@ -11,22 +11,18 @@ protocol ImagesListViewPresenterProtocol {
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     private let service: ImagesListService
-      var view: ImagesListViewProtocol?
+    private weak var view: ImagesListViewProtocol?
     var photos: [Photo] = []
     
-    
-    
-    init(service: ImagesListService) {
+    init(service: ImagesListService, view: ImagesListViewProtocol) {
         self.service = service
-        setupObservers()
-        
+        self.view = view
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    
+        
     private func setupObservers() {
         NotificationCenter.default.addObserver(
             self,
@@ -50,6 +46,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     }
     func viewDidLoad() {
         service.fetchPhotosNextPage()
+        setupObservers()
     }
     func calculateCellHeight(for indexPath: IndexPath, tableView: UITableView) -> CGFloat {
         let photo = photos[indexPath.row]
@@ -59,21 +56,31 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
         return cellHeight
     }
     func changeLike(at indexPath: IndexPath, isLikes: Bool) {
-        let photo = self.photos[indexPath.row]
+        var photo = self.photos[indexPath.row]
+    
+        photo.isLiked = isLikes
+        self.photos[indexPath.row] = photo
+        
         self.view?.blockProgressHUDOn()
-         service.changeLike(photoId: photo.id,indexPatch: indexPath, isLike: isLikes) { result in
-             let indexPatch = indexPath
-             switch result {
-             case .success:
-                 DispatchQueue.main.async {
-                     self.view?.updatePhoto(at: indexPatch)
-                     self.view?.blockProgressHUDOff()
-                 }
-             case .failure(let error):
-                 print("Ошибка изменения лайка: \(error.localizedDescription)")
-                 UIBlockProgressHUD.dismiss()
-             }
-         }
+        
+        service.changeLike(photoId: photo.id, indexPatch: indexPath, isLike: isLikes) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.photos = self.service.photos
+                    self.view?.updatePhoto(at: indexPath)
+
+                case .failure:
+                  print("ошибка возврат ячейки")
+                    photo.isLiked = !isLikes
+                    self.photos[indexPath.row] = photo
+                }
+                
+                self.view?.blockProgressHUDOff()
+            }
+        }
     }
     
 }

@@ -14,7 +14,7 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
     @IBOutlet var tableView: UITableView!
     
     // MARK: - Properties
-    private var presenter: ImagesListViewPresenterProtocol!
+    var presenter: ImagesListViewPresenterProtocol!
     private let imagesListService = ImagesListService()
     private let showSingleImageIdentifier = "ShowSingleImage"
     private let currentDate = Date()
@@ -24,17 +24,15 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imagesListService.fetchPhotosNextPage()
-       // presenter = ImagesListViewPresenter(service: imagesListService, view: self)
+        presenter.viewDidLoad()
+
         
     }
     
  
     
     // MARK: - Setup Methods
-      func configure(_ presenter: ImagesListViewPresenterProtocol) {
-       self.presenter = presenter
-    }
+
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         
@@ -46,21 +44,20 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
         cell.setIsLiked = { [weak self] in
             guard let self = self else { return }
             
-           
        let isLikes = cell.likeButton.currentImage == cell.noActiveImage
             presenter.changeLike(at: indexPath, isLikes: isLikes)
         }
     }
     
-    func updatePhoto (at indexPatch: IndexPath){
-        guard let cell = tableView.cellForRow(at: indexPatch) as? ImagesListCell else { return}
-        print("Лайк успешно изменён.")
-        self.presenter.photos = self.imagesListService.photos
-        var newLikeImage: UIImage?
-        let likes = self.presenter.photos[indexPatch.row].isLiked
-        newLikeImage = likes ? cell.activeImage : cell.noActiveImage
-        cell.likeButton.setImage(newLikeImage, for: .normal)
+    func updatePhoto(at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell else {
+            print("лайк не получился")
+            return
+        }
+        let photo = presenter.photos[indexPath.row]
         
+        let newLikeImage = photo.isLiked ? cell.activeImage : cell.noActiveImage
+        cell.likeButton.setImage(newLikeImage, for: .normal)
     }
     
     func blockProgressHUDOn() {

@@ -9,16 +9,15 @@ public protocol ProfilePresenterProtocol: AnyObject {
 
 final class ProfilePresenter:ProfilePresenterProtocol{
     
-    private weak var view: ProfileView?
+    weak var view: ProfileView?
     private let profileService: ProfileService
     private let profileImageService: ProfileImageService
     private let profileLogoutService: ProfileLogoutService
     
-    init(view: ProfileView,
+    init(
          profileService: ProfileService = .shared,
          profileImageService: ProfileImageService = .shared,
          profileLogoutService: ProfileLogoutService = .shared) {
-        self.view = view
         self.profileService = profileService
         self.profileImageService = profileImageService
         self.profileLogoutService = profileLogoutService

@@ -110,9 +110,10 @@
                                     <constraint firstAttribute="height" constant="60" id="pF3-Zt-QHR"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QCp-CP-e2c">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QCp-CP-e2c" userLabel="Войти">
                                 <rect key="frame" x="16" y="668" width="370" height="48"/>
                                 <color key="backgroundColor" name="YP White (iOS)"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate" label="Войти"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="l9u-cf-DQd" userLabel="height = 48"/>
                                 </constraints>
@@ -178,6 +179,7 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5Z-Zi-9IA" userLabel="Like">
                                                     <rect key="frame" x="342" y="4" width="44" height="44"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="like" label="Active"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="44" id="QHR-Vq-pWe"/>
                                                         <constraint firstAttribute="height" constant="44" id="Wjv-9z-Nph"/>
@@ -299,6 +301,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qr3-GQ-ZcG" userLabel="BackButton">
                                 <rect key="frame" x="8" y="70" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="BackButton" label="Backward"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="PuV-6q-2nQ"/>
                                     <constraint firstAttribute="width" constant="48" id="sIG-Rz-QBA"/>

@@ -53,6 +53,7 @@ final class ProfileViewController: UIViewController, ProfileView {
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
+        button.accessibilityIdentifier = "e"
         if let exitImage = UIImage(named: "Exit") {
             button.setImage(exitImage, for: .normal)
         }

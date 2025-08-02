@@ -28,6 +28,8 @@ class WebViewViewController: UIViewController & WebViewViewControllerProtocol{
     // MARK: - Setup Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        webView.accessibilityIdentifier = "webView"
+        
         
         webView.navigationDelegate = self
         presenter?.loadAuthView()

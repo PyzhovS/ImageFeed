@@ -25,14 +25,16 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         imagesListService.fetchPhotosNextPage()
-        presenter = ImagesListViewPresenter(service: imagesListService, view: self)
+       // presenter = ImagesListViewPresenter(service: imagesListService, view: self)
         
     }
     
  
     
     // MARK: - Setup Methods
-    
+      func configure(_ presenter: ImagesListViewPresenterProtocol) {
+       self.presenter = presenter
+    }
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         

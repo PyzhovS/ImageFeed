@@ -11,14 +11,13 @@ protocol ImagesListViewPresenterProtocol {
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     private let service: ImagesListService
-    private weak var view: ImagesListViewProtocol?
+      var view: ImagesListViewProtocol?
     var photos: [Photo] = []
     
     
     
-    init(service: ImagesListService, view: ImagesListViewProtocol) {
+    init(service: ImagesListService) {
         self.service = service
-        self.view = view
         setupObservers()
         
     }

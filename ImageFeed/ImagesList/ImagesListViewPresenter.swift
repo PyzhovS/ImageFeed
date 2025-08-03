@@ -3,7 +3,7 @@ import UIKit
 
 protocol ImagesListViewPresenterProtocol {
     var photos: [Photo] {get set}
-   func willDisplayCell(at indexPath: IndexPath)
+    func willDisplayCell(at indexPath: IndexPath)
     func viewDidLoad()
     func calculateCellHeight(for indexPath: IndexPath, tableView: UITableView) -> CGFloat
     func changeLike(at indexPath: IndexPath, isLikes: Bool)
@@ -11,7 +11,7 @@ protocol ImagesListViewPresenterProtocol {
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     private let service: ImagesListService
-    private weak var view: ImagesListViewProtocol?
+    weak var view: ImagesListViewProtocol?
     var photos: [Photo] = []
     
     init(service: ImagesListService, view: ImagesListViewProtocol) {
@@ -22,7 +22,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-        
+    
     private func setupObservers() {
         NotificationCenter.default.addObserver(
             self,
@@ -57,7 +57,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     }
     func changeLike(at indexPath: IndexPath, isLikes: Bool) {
         var photo = self.photos[indexPath.row]
-    
+        
         photo.isLiked = isLikes
         self.photos[indexPath.row] = photo
         
@@ -71,9 +71,9 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
                 case .success:
                     self.photos = self.service.photos
                     self.view?.updatePhoto(at: indexPath)
-
+                    
                 case .failure:
-                  print("ошибка возврат ячейки")
+                    print("ошибка возврат ячейки")
                     photo.isLiked = !isLikes
                     self.photos[indexPath.row] = photo
                 }

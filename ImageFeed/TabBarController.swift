@@ -6,7 +6,6 @@ final class TabBarController: UITabBarController {
         
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
-        // ImagesListViewController setup
         guard let imagesListViewController = storyboard.instantiateViewController(
             withIdentifier: "ImagesListViewController"
         ) as? ImagesListViewController else { return }
@@ -17,14 +16,12 @@ final class TabBarController: UITabBarController {
             view: imagesListViewController
         )
         imagesListViewController.presenter = imagesListPresenter
-        
-        
+    
         let profileViewController = ProfileViewController()
         let profilePresenter = ProfilePresenter()
         profileViewController.configure(profilePresenter)
         profilePresenter.view = profileViewController
-        
-        
+    
         profileViewController.tabBarItem = UITabBarItem(
             title: "",
             image: UIImage(named: "tab_profile_active"),

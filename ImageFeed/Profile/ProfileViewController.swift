@@ -152,7 +152,7 @@ final class ProfileViewController: UIViewController, ProfileView {
     func alertExit(){
         
         let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
-    
+        
         let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
             self.profileLogoutService.logout()
         }

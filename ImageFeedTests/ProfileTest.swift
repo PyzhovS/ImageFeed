@@ -12,7 +12,7 @@ final class ProfileTests: XCTestCase {
         
         XCTAssertTrue(presenterSpy.viewDidLoadCalled)
     }
-
+    
     func testViewControllerCallsDidTapExitButtonOnPresenter() {
         let presenterSpy = PresenterSpy()
         let sut = ProfileViewController()
@@ -32,8 +32,8 @@ final class ProfileTests: XCTestCase {
         XCTAssertEqual(sut.labelNik.text, "тест")
         XCTAssertEqual(sut.labelComment.text, "тест")
         XCTAssertEqual(sut.imageView.image, UIImage(named: "тест"))
-    
+        
     }
-
+    
 }
 

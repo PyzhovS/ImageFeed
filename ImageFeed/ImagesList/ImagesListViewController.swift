@@ -5,8 +5,7 @@ protocol ImagesListViewProtocol: AnyObject {
     func updatePhoto (at indexPatch: IndexPath)
     func updateTableViewAnimated(oldCount: Int, newCount: Int)
     func blockProgressHUDOn()
-    func blockProgressHUDOff()
-    
+    func blockProgressHUDOff()    
 }
 
 class ImagesListViewController: UIViewController, ImagesListViewProtocol {
@@ -18,21 +17,16 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
     private let imagesListService = ImagesListService()
     private let showSingleImageIdentifier = "ShowSingleImage"
     private let currentDate = Date()
-    var image: UIImage?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         presenter.viewDidLoad()
-
         
     }
     
- 
-    
     // MARK: - Setup Methods
-
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         
@@ -44,7 +38,7 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
         cell.setIsLiked = { [weak self] in
             guard let self = self else { return }
             
-       let isLikes = cell.likeButton.currentImage == cell.noActiveImage
+            let isLikes = cell.likeButton.currentImage == cell.noActiveImage
             presenter.changeLike(at: indexPath, isLikes: isLikes)
         }
     }
@@ -123,21 +117,21 @@ class ImagesListViewController: UIViewController, ImagesListViewProtocol {
     }
     
     @objc func updateTableViewAnimated(oldCount: Int, newCount: Int) {
- 
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
-        }
+        
+        tableView.performBatchUpdates {
+            let indexPaths = (oldCount..<newCount).map { i in
+                IndexPath(row: i, section: 0)
+            }
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        } completion: { _ in }
     }
-    
+}
+
 
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,forRowAt indexPath: IndexPath) {
-
+        
         presenter.willDisplayCell(at: indexPath)
         print("indexPath \(indexPath.row)")
         print(" photos\(imagesListService.photos.count)")

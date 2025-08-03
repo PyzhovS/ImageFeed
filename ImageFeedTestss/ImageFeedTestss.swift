@@ -2,35 +2,35 @@
 import XCTest
 
 final class ImageFeedTestss: XCTestCase {
-
+    
     private let app = XCUIApplication()
-       
-       override func setUpWithError() throws {
-           continueAfterFailure = false
-           
-           app.launch()
-       }
-       
+    
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        
+        app.launch()
+    }
+    
     func testAuth() throws {
         app.buttons["Authenticate"].tap()
         
         let webView = app.webViews["webView"]
         
-        XCTAssertTrue(webView.waitForExistence(timeout: 10))
-
+        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+        
         let loginTextField = webView.descendants(matching: .textField).element
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("pyzhovs@icloud.com")
+        loginTextField.typeText(" ")
         app.typeText("\t")
         webView.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         passwordTextField.tap()
-        passwordTextField.typeText("serik777")
+        passwordTextField.typeText(" ")
         app.typeText("\t")
         webView.swipeUp()
         
@@ -41,7 +41,7 @@ final class ImageFeedTestss: XCTestCase {
         
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
     }
-       
+    
     func testFeed() throws {
         let tablesQuery = app.tables
         
@@ -71,20 +71,28 @@ final class ImageFeedTestss: XCTestCase {
         let navBackButtonWhiteButton = app.buttons["BackButton"]
         navBackButtonWhiteButton.tap()
     }
-       
-       func testProfile() throws {
-            
-               
-               sleep(5)
-           
-               app.tabBars.buttons.element(boundBy: 1).tap()
-              
-               XCTAssertTrue(app.staticTexts["Sergey Pyzhov"].exists)
-               XCTAssertTrue(app.staticTexts["@zlobin3911"].exists)
-               
-               app.buttons["exitButton"].tap()
-               
-               app.alerts["Пока, Пока"].scrollViews.otherElements.buttons["exitYes"].tap()
-           }
-          
-       }
+    
+    func testProfile() throws {
+        
+        
+        sleep(5)
+        
+        app.tabBars.buttons.element(boundBy: 1).tap()
+        
+        XCTAssertTrue(app.staticTexts["Sergey Pyzhov"].exists)
+        XCTAssertTrue(app.staticTexts["@zlobin3911"].exists)
+        
+        app.buttons["exitButton"].tap()
+        
+        app.alerts[ "Пока, Пока!"].scrollViews.otherElements.buttons[ "Да"].tap()
+        
+        sleep(5)
+        
+        app.buttons["Authenticate"].tap()
+        
+        let webView = app.webViews["webView"]
+        
+        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+    }
+    
+}

@@ -14,6 +14,4 @@ final class PresenterSpy: ProfilePresenterProtocol  {
     func didTapExitButton() {
         didTapExitButtonCalled = true
     }
-    
-    
 }

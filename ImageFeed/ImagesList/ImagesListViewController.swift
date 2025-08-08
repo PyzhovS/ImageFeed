@@ -1,68 +1,65 @@
 import UIKit
 import Kingfisher
 
+protocol ImagesListViewProtocol: AnyObject {
+    func updatePhoto (at indexPatch: IndexPath)
+    func updateTableViewAnimated(oldCount: Int, newCount: Int)
+    func blockProgressHUDOn()
+    func blockProgressHUDOff()    
+}
 
-
-final class ImagesListViewController: UIViewController {
+class ImagesListViewController: UIViewController, ImagesListViewProtocol {
     
     @IBOutlet var tableView: UITableView!
     
     // MARK: - Properties
+    var presenter: ImagesListViewPresenterProtocol!
     private let imagesListService = ImagesListService()
     private let showSingleImageIdentifier = "ShowSingleImage"
     private let currentDate = Date()
-    var photos: [Photo] = []
-    var image: UIImage?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        imagesListService.fetchPhotosNextPage()
+        presenter.viewDidLoad()
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(updateTableViewAnimated),
-            name: ImagesListService.didChangeNotification,
-            object: nil
-        )
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Setup Methods
+    
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         
-        let photo = photos[indexPath.row]
+        let photo = presenter.photos[indexPath.row]
         guard let url = URL(string: photo.thumbImageURL) else { return }
         
         cell.configure(with: url, date: DateFormatter.longStyle.string(from: photo.createdAt), likes: photo.isLiked)
         
         cell.setIsLiked = { [weak self] in
             guard let self = self else { return }
+            
             let isLikes = cell.likeButton.currentImage == cell.noActiveImage
-            UIBlockProgressHUD.show()
-            imagesListService.changeLike(photoId: photo.id,indexPatch: indexPath, isLike: isLikes) { result in
-                let indexPatch = indexPath
-                switch result {
-                case .success:
-                    DispatchQueue.main.async {
-                        print("Лайк успешно изменён.")
-                        self.photos = self.imagesListService.photos
-                        var newLikeImage: UIImage?
-                        let likes = self.photos[indexPatch.row].isLiked
-                        newLikeImage = likes ? cell.activeImage : cell.noActiveImage
-                        cell.likeButton.setImage(newLikeImage, for: .normal)
-                        UIBlockProgressHUD.dismiss()
-                    }
-                case .failure(let error):
-                    print("Ошибка изменения лайка: \(error.localizedDescription)")
-                    UIBlockProgressHUD.dismiss()
-                }
-            }
+            presenter.changeLike(at: indexPath, isLikes: isLikes)
         }
+    }
+    
+    func updatePhoto(at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell else {
+            print("лайк не получился")
+            return
+        }
+        let photo = presenter.photos[indexPath.row]
+        
+        let newLikeImage = photo.isLiked ? cell.activeImage : cell.noActiveImage
+        cell.likeButton.setImage(newLikeImage, for: .normal)
+    }
+    
+    func blockProgressHUDOn() {
+        UIBlockProgressHUD.show()
+    }
+    
+    func blockProgressHUDOff() {
+        UIBlockProgressHUD.dismiss()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -81,7 +78,7 @@ final class ImagesListViewController: UIViewController {
         imageLoadedFull()
         
         func imageLoadedFull() {
-            let photo = photos[indexPath.row]
+            let photo = presenter.photos[indexPath.row]
             let photoSet = UIImage(named:"Stuboff")
             let imageFull = UIImageView()
             UIBlockProgressHUD.show()
@@ -119,34 +116,29 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    @objc func updateTableViewAnimated() {
-        let oldCount = photos.count
-        let newCount = imagesListService.photos.count
-        photos = imagesListService.photos
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
-        }
+    @objc func updateTableViewAnimated(oldCount: Int, newCount: Int) {
+        
+        tableView.performBatchUpdates {
+            let indexPaths = (oldCount..<newCount).map { i in
+                IndexPath(row: i, section: 0)
+            }
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        } completion: { _ in }
     }
-    
 }
+
 
 extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == imagesListService.photos.count  {
-            imagesListService.fetchPhotosNextPage()
-        }
+        
+        presenter.willDisplayCell(at: indexPath)
         print("indexPath \(indexPath.row)")
         print(" photos\(imagesListService.photos.count)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        photos.count
+        presenter.photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -168,11 +160,7 @@ extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat  {
         
-        let photo = photos[indexPath.row]
-        let imageSet = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
-        let scale = (tableView.bounds.width - imageSet.left - imageSet.right) / photo.size.width
-        let cellHeight = photo.size.height * scale + imageSet.top + imageSet.bottom
-        return cellHeight
+        presenter.calculateCellHeight(for: indexPath, tableView: tableView)
     }
 }
 

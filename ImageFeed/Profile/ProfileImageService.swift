@@ -41,14 +41,14 @@ final class ProfileImageService {
             case.success(let userResult):
                 self?.avatarURL = userResult.profileImage.small
                 guard let avatarURL = self?.avatarURL else { return }
-               
+                
                 completion(.success(avatarURL))
                 print("[fetchProfileImageURL] - Аватарка успешна загружена.")
                 NotificationCenter.default
                     .post(name: ProfileImageService.didChangeNotification,
                           object: self,
                           userInfo: ["URL": avatarURL])
-         
+                
                 Task { @MainActor in
                     guard let self else {return}
                     self.profileImage()}

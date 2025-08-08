@@ -1,8 +1,15 @@
 import UIKit
 import SwiftKeychainWrapper
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileView: AnyObject {
+    func displayProfile(name: String, loginName: String, bio: String, image: UIImage?)
+    func showLogoutConfirmation()
+}
+
+final class ProfileViewController: UIViewController, ProfileView {
     
+    
+    private var presenter: ProfilePresenterProtocol!
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private let token = OAuth2TokenStorage.shared.token
@@ -10,7 +17,7 @@ final class ProfileViewController: UIViewController {
     private var profileLogoutService = ProfileLogoutService.shared
     
     // MARK: - Properties
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         if let avatarImage = UIImage(named: "avatar") {
             imageView.image = avatarImage
@@ -18,7 +25,7 @@ final class ProfileViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    private lazy var labelName: UILabel = {
+    lazy var labelName: UILabel = {
         let label = UILabel()
         label.text = ""
         label.textColor = .ypWhiteIOS
@@ -26,7 +33,7 @@ final class ProfileViewController: UIViewController {
         label.font = UIFont.boldSystemFont(ofSize: 23)
         return label
     }()
-    private lazy var labelNik: UILabel = {
+    lazy var labelNik: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.textColor = .ypGrayIOS
@@ -35,7 +42,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private lazy var labelComment: UILabel = {
+    lazy var labelComment: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.textColor = .ypWhiteIOS
@@ -46,6 +53,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
+        button.accessibilityIdentifier = "exitButton"
         if let exitImage = UIImage(named: "Exit") {
             button.setImage(exitImage, for: .normal)
         }
@@ -56,9 +64,8 @@ final class ProfileViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let profile = profileService.profile {
-            updateProfileDetails(profile: profile)
-        }
+        //    presenter = ProfilePresenter(view: self)
+        presenter.viewDidLoad()
         view.backgroundColor = .ypBlackIOS
         setupUI()
         
@@ -75,6 +82,10 @@ final class ProfileViewController: UIViewController {
         
     }
     // MARK: - Setup Methods
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+    }
+    
     func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -119,23 +130,33 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    func updateProfileDetails(profile: Profile) {
-        self.labelName.text = profile.name
-        self.labelNik.text = profile.loginName
-        self.labelComment.text = profile.bio
-        self.imageView.image = profileImageService.image
+    func displayProfile(name: String,
+                        loginName: String,
+                        bio: String,
+                        image: UIImage?)
+    {
+        labelName.text = name
+        labelNik.text = loginName
+        labelComment.text = bio
+        imageView.image = image
     }
     
-    @objc private func exitButtonTapped() {
-        print("Нажал кнопку выхода")
+    func showLogoutConfirmation() {
         alertExit()
+    }
+    
+    @objc func exitButtonTapped() {
+        print("Нажал кнопку выхода")
+        presenter.didTapExitButton()
     }
     func alertExit(){
         
         let alert = UIAlertController(title: "Пока, Пока!", message: "Уверены что хотите выйти?", preferredStyle: .alert)
+        
         let exitProfileYes = UIAlertAction(title: "Да", style: .cancel) { _ in
             self.profileLogoutService.logout()
         }
+        exitProfileYes.accessibilityIdentifier = "exitYes"
         let exitProfileNo = UIAlertAction(title: "Нет", style: .default, handler: nil)
         
         alert.addAction(exitProfileYes)
